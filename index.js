@@ -6,6 +6,10 @@ class ProductManager{
         this.products=[];
         this.ruta=ruta
     }
+    async writeProd(arr){
+        const comoJson = JSON.stringify(arr)    
+        await fs.promises.writeFile(this.ruta, comoJson) 
+    }
 
     getProducts(){
         return this.products;
@@ -72,14 +76,18 @@ prodAdd.addProduct({title:"Book 2", description:"Description 2", price:12, thumb
 prodAdd.addProduct({title:"Book 3", description:"Description 3", price:13, thumbnail:"thumbnail book 3", code:"3C", stock:10 })
 prodAdd.addProduct({title:"Book 4", description:"Description 4", price:14, thumbnail:"thumbnail book 4", code:"4D", stock:3 })
 
-console.log(prodAdd.getProducts())
-// 
+const arrayProd = prodAdd.getProducts()
+
+console.log(arrayProd)
+
 prodAdd.getProductById(1)
 prodAdd.getProductById(5) 
-// 
+
 prodAdd.deleteProduct(3)
-// 
+
 prodAdd.updatePrduct(1, {title:"New Book", stock:4})
 
 console.log(prodAdd.getProducts())
 
+const write = new ProductManager('./Productos.json')
+write.writeProd(arrayProd)
