@@ -1,11 +1,19 @@
 {
   "name": "backcommerce",
   "version": "1.0.0",
-  "description": "",
+  "description": "Ecommerce proyect from the course of Backend in coderhouse",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/julietacastano/Backends-Ecommerce.git"
+  },
+  "bugs": {
+    "url": "https://github.com/julietacastano/Backends-Ecommerce/issues"
+  },
+  "homepage": "https://github.com/julietacastano/Backends-Ecommerce#readme"
 }
