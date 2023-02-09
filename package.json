@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Ecommerce proyect from the course of Backend in coderhouse",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/julietacastano/Backends-Ecommerce/issues"
   },
-  "homepage": "https://github.com/julietacastano/Backends-Ecommerce#readme"
+  "homepage": "https://github.com/julietacastano/Backends-Ecommerce#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }

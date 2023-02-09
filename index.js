@@ -1,10 +1,11 @@
-
-const fs = require('fs')
+import fs from 'fs'
 
 class ProductManager{
     constructor(path){
         this.path=path
-        fs.writeFileSync(this.path,"[]")
+        if (!fs.existsSync(this.path)) {
+            fs.writeFileSync(this.path, JSON.stringify([]));
+        }
     }
 
     addProduct({title, description,price,thumbnail,code,stock}){
@@ -19,7 +20,8 @@ class ProductManager{
         } else{
             products.push(prod);
             fs.writeFileSync(this.path, JSON.stringify(products))
-        }  
+        } 
+        return 
     }  
 
     getProducts(){
@@ -29,13 +31,16 @@ class ProductManager{
 
     getProductById(prodId){
         const products = JSON.parse(fs.readFileSync(this.path, 'utf8'))
-        const findId = products.find(el => el.id === prodId);
+        const findId = products.find(el => el.id == prodId);
 
         if(findId){
             console.log("Encontramos producto, titulo " + findId.title )
+            return findId
         }else{
             console.log("No encontramos el producto")
+            return {error:"No se encontro el Id ingresado"}
         }
+        return
     }
 
     updatePrduct(prodId, newData){
@@ -75,18 +80,20 @@ class Product{
     }
 }
 
+export default ProductManager
+
 const prodManager=new ProductManager('products.json')
 prodManager.addProduct({title:"Book 1", description:"Description 1", price:11, thumbnail:"thumbnail book 1", code:"1A", stock:5 })
 prodManager.addProduct({title:"Book 2", description:"Description 2", price:12, thumbnail:"thumbnail book 2", code:"2B", stock:8 })
 prodManager.addProduct({title:"Book 3", description:"Description 3", price:13, thumbnail:"thumbnail book 3", code:"3C", stock:10 })
 prodManager.addProduct({title:"Book 4", description:"Description 4", price:14, thumbnail:"thumbnail book 4", code:"4D", stock:3 })
 
-const arrayProd = prodManager.getProducts()
+// const arrayProd = prodManager.getProducts()
+// 
+// console.log(arrayProd)
 
-console.log(arrayProd)
-
-prodManager.getProductById(1)
-prodManager.getProductById(5) 
+//prodManager.getProductById(1)
+//prodManager.getProductById(5) 
 
 //prodManager.deleteProduct(3)
 
