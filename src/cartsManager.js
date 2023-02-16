@@ -31,6 +31,11 @@ class Carts{
             return{error:"el carrito no se ha encontrado"}
         }
 
+        const products = JSON.parse(fs.readFileSync('./products.json', 'utf8'))
+        const findProdId = products.find(el => el.id == idProd);
+
+        if(!findProdId){return {error:"el producto no existe"}}
+
         const findProd = findCart.products.find(el => el.id === idProd)
         if(findProd){
             findProd.quantity++

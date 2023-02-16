@@ -1,7 +1,7 @@
 export default class Product{
     constructor({title, description,price,thumbnail,code,stock,status=true, category, id}){
         if(!title || !description || !price || !code || !stock || !category){
-            return{error:"Falta una propiedad"}
+            throw new Error("Falta una propiedad")
         }
         
         this.title = title,
