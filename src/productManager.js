@@ -8,20 +8,21 @@ class ProductManager{
         }
     }
 
-    addProduct({title, description,price,thumbnail,code,stock}){
+    addProduct(prod){
         const products = JSON.parse(fs.readFileSync(this.path, 'utf8'))
 
         let id=products.length + 1  
-        const prod= new Product({title,description,price,thumbnail,code,stock, id})
+        
+        const code = prod.code
 
         const findCode = products.find(el => el.code === code );
         if(findCode){
-            console.log("codigo repetido en producto: " + title)
+            return {error:"Codigo repetido"}
         } else{
-            products.push(prod);
+            products.push({...prod, id});
             fs.writeFileSync(this.path, JSON.stringify(products))
-        } 
-        return 
+        }  
+        return products
     }  
 
     getProducts(){
@@ -40,19 +41,24 @@ class ProductManager{
             console.log("No encontramos el producto")
             return {error:"No se encontro el Id ingresado"}
         }
-        return
     }
 
     updatePrduct(prodId, newData){
         const products = JSON.parse(fs.readFileSync(this.path, 'utf8'))
-        const updateId = products.findIndex(el => el.id === prodId);
+        const updateId = products.find(el => el.id === prodId);
         
-        products[updateId]={
-            ...products[updateId],
-            ...newData
+        if(newData.id){
+            return {error:"No se debe cambiar el id"}
+        }          
+        if(!updateId){
+            return {error:"No se encontro el id"}
         }
+        
+        const productUpdated = Object.assign(updateId,newData)
 
         fs.writeFileSync(this.path, JSON.stringify(products))
+
+        return productUpdated
     }
 
     deleteProduct(prodId){
@@ -65,28 +71,14 @@ class ProductManager{
 
 } 
 
-class Product{
-    constructor({title, description,price,thumbnail,code,stock, id}){
-        if(title == undefined || description == undefined || price == undefined || thumbnail == undefined || code == undefined || stock == undefined){
-            throw new Error("Falta una propiedad")
-        }
-        this.title = title,
-        this.description = description,
-        this.price = price,
-        this.thumbnail = thumbnail,
-        this.code = code,
-        this.stock = stock,
-        this.id = id
-    }
-}
+const prodManager = new ProductManager('products.json')
 
-export default ProductManager
+export default prodManager
 
-const prodManager=new ProductManager('products.json')
-prodManager.addProduct({title:"Book 1", description:"Description 1", price:11, thumbnail:"thumbnail book 1", code:"1A", stock:5 })
-prodManager.addProduct({title:"Book 2", description:"Description 2", price:12, thumbnail:"thumbnail book 2", code:"2B", stock:8 })
-prodManager.addProduct({title:"Book 3", description:"Description 3", price:13, thumbnail:"thumbnail book 3", code:"3C", stock:10 })
-prodManager.addProduct({title:"Book 4", description:"Description 4", price:14, thumbnail:"thumbnail book 4", code:"4D", stock:3 })
+// prodManager.addProduct({title:"Book 1", description:"Description 1", price:11, thumbnail:"thumbnail book 1", code:"1A", stock:5 })
+// prodManager.addProduct({title:"Book 2", description:"Description 2", price:12, thumbnail:"thumbnail book 2", code:"2B", stock:8 })
+// prodManager.addProduct({title:"Book 3", description:"Description 3", price:13, thumbnail:"thumbnail book 3", code:"3C", stock:10 })
+// prodManager.addProduct({title:"Book 4", description:"Description 4", price:14, thumbnail:"thumbnail book 4", code:"4D", stock:3 })
 
 // const arrayProd = prodManager.getProducts()
 // 
