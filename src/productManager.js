@@ -64,8 +64,8 @@ class ProductManager{
     deleteProduct(prodId){
         const products = JSON.parse(fs.readFileSync(this.path, 'utf8'))
         const deleteId = products.findIndex(el => el.id === prodId);
-        
-        const prodSplice = products.splice(deleteId,1)
+
+        products.splice(deleteId,1)
         fs.writeFileSync(this.path, JSON.stringify(products))
     } 
 

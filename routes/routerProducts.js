@@ -7,15 +7,28 @@ const arrayProd = prodManager.getProducts()
 const routerProducts = Router()
 
 routerProducts.get('/', (req,res) => {
-    console.log(req.query)
     let limit = req.query.limit
     const Products = arrayProd.slice(0, limit)
-    res.json({Products})
+    //res.json({Products})
+    res.render('home', {
+        title:'Products',
+        products: Products,
+        productsNotEmpty: Products.length > 0,
+    })  
+})
+
+//Real time products
+routerProducts.get('/realtimeproducts', (req,res) => {
+    let limit = req.query.limit
+    const Products = arrayProd.slice(0, limit)
+    res.render('realtimeproducts', {
+        title:'Products real time',
+    })  
 })
 
 routerProducts.get('/:pid', async (req,res)=>{
     const productFound = await prodManager.getProductById(parseInt(req.params.pid))
-    res.json({productFound})    
+    res.json({productFound})  
 }) 
 
 routerProducts.post('/', (req,res)=>{
@@ -38,9 +51,8 @@ routerProducts.put('/:pid', (req,res)=>{
 routerProducts.delete('/:pid', (req,res)=>{
     try {
         const productDelete = prodManager.deleteProduct(parseInt(req.params.pid))
-        res.status(201).json({productDelete})
+        res.status(201).json(`product deleted`)
     }catch(error){res.status(400).json({err:error.message})}
-    res.json({productFound})    
 }) 
 
 export default routerProducts
