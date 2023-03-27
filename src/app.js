@@ -1,9 +1,9 @@
 import Express from "express";
+import { Server } from "socket.io";
+import { engine } from "express-handlebars";
 import routerCart from "../routes/routerCarts.js";
 import routerProducts from "../routes/routerProducts.js";
-import { engine } from "express-handlebars";
-import { Server } from "socket.io";
-import prodManager from "./productManager.js";
+import prodManager from "./managers/productManager.js";
 import Product from "./product.js";
 
 const port = 8080

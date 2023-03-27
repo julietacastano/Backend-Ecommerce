@@ -1,11 +1,16 @@
-<h1>Products</h1>
-<div>
-    {{#if productsNotEmpty}}
-    <ul>
+<h1 class="text-4xl text-center font-semibold">{{titlePage}}</h1>
+<div class="m-10 flex-row">
+    {{#if products}}
+        <ul>
         {{#each products}}
-        <li>{{this.title}}</li>
+        <li>
+            {{#each this}}
+                {{this.title}}
+            {{/each}}
+            </li>
+            <button class="bg-indigo-600 p-2 rounded text-center text-white">Agregar al carrito </button>
         {{/each}}
-    </ul>
+        </ul>
     {{else}}
     <h3>There are no product available</h3>
     {{/if}}

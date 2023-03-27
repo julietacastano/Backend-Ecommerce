@@ -1,13 +1,15 @@
 import { Router } from "express";
-import cartsManager from "../src/cartsManager.js";
+import cartsManager from "../src/managers/cartsManager.js";
 
 const routerCart = Router()
 
-routerCart.get('/:cid', (req,res)=>{
-    const cartFound = cartsManager.getCart(parseInt(req.params.cid))
-    res.status(201).json({...cartFound})
+//Muestra carrito--------------------------------------------------------
+routerCart.get('/:cid', async (req,res)=>{
+    await cartsManager.getCarts(req.params.cid) 
+    res.status(201).json({succes:"Se encontro el carrito pedido"})
 })
 
+//Crea un carrito -------------------------------------------------
 routerCart.post('/',(req,res)=>{
     try{
         const newCart = cartsManager.createCart()
@@ -15,10 +17,25 @@ routerCart.post('/',(req,res)=>{
     }catch(error){res.status(400).json({err:error.message})}
 })
 
-routerCart.post('/:cid/product/:pid',(req,res)=>{
+//Agrega productos al carrito -------------------------------------------------
+routerCart.post('/:cid/product/:pid',async (req,res)=>{
     try{
-        const addProd = cartsManager.addToCart(parseInt(req.params.cid),parseInt(req.params.pid))
+        const addProd = await cartsManager.addToCart(req.params.cid,req.params.pid)
         res.status(200).json(addProd)
+    }catch(error){res.status(400).json({err:error.message})}
+})
+
+routerCart.delete(':cid/products/:pid', async(req, res) => {
+    try{
+        const cartDeleted = prodManager.deleteProduct(req.params.cid,req.params.pid)
+        res.status(200).json(cartDeleted)
+    }catch(error){res.status(400).json({err:error.message})}
+})
+
+routerCart.put('/:cid', async(req, res) => {
+    try{
+        const cartPopulated = prodManager.updateCart(req.params.cid)
+        res.status(200).json(cartPopulated)
     }catch(error){res.status(400).json({err:error.message})}
 })
 

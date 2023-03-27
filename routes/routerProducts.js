@@ -1,23 +1,36 @@
 import { Router } from "express";
-import  prodManager from "../src/productManager.js";
-import Product from "../src/product.js";
-
-const arrayProd = prodManager.getProducts()
+import  prodManager from "../src/managers/productManager.js";
 
 const routerProducts = Router()
 
-routerProducts.get('/', (req,res) => {
+//Muestra todos los productos con un limit -------------------------------------
+routerProducts.get('/', async(req,res) => {
     let limit = req.query.limit
-    const Products = arrayProd.slice(0, limit)
-    //res.json({Products})
+    let price = req.query.price
+    let name = req.query.price
+
+    const Products = await prodManager.getProducts(limit, price, name)
+
     res.render('home', {
-        title:'Products',
+        titlePage:'Products',
         products: Products,
-        productsNotEmpty: Products.length > 0,
     })  
 })
 
-//Real time products
+//Agregar un producto nuevo ------------------------------------------
+routerProducts.post('/', async(req,res)=>{
+
+    const addProd = await prodManager.addProduct(req.body)
+    console.log(addProd)
+
+    if(addProd.error){
+        return res.status(404).json(addProd)
+    }
+    return res.status(201).json(addProd)
+    
+})
+
+//Real time productos
 routerProducts.get('/realtimeproducts', (req,res) => {
     let limit = req.query.limit
     const Products = arrayProd.slice(0, limit)
@@ -26,31 +39,25 @@ routerProducts.get('/realtimeproducts', (req,res) => {
     })  
 })
 
+//Mostrar productos por ID--------------------------------------------------------
 routerProducts.get('/:pid', async (req,res)=>{
-    const productFound = await prodManager.getProductById(parseInt(req.params.pid))
+    const productFound = await prodManager.getProductById(req.params.pid)
     res.json({productFound})  
 }) 
 
-routerProducts.post('/', (req,res)=>{
-    try{
-        const productData = req.body
-        const newProd = new Product(productData)
-        const prodAdded = prodManager.addProduct(newProd)
-        res.status(201).json({prodAdded})
-    }catch(error){res.status(400).json({err:error.message})}
-})
 
-routerProducts.put('/:pid', (req,res)=>{
+//Editar un producto existente ----------------------------------------------------------------
+routerProducts.put('/:pid', async (req,res)=>{
     try{
-        const newData = req.body
-        const updatedProd = prodManager.updatePrduct(parseInt(req.params.pid),newData)
+        const updatedProd = await prodManager.updatePrduct({id:req.params.pid}, req.body)
         res.status(201).json(updatedProd)
     }catch(error){res.status(400).json({err:error.message})}
 })
 
+//Elimiar un producto------------------------------------------------------------------------
 routerProducts.delete('/:pid', (req,res)=>{
     try {
-        const productDelete = prodManager.deleteProduct(parseInt(req.params.pid))
+        prodManager.deleteProduct(req.params.pid)
         res.status(201).json(`product deleted`)
     }catch(error){res.status(400).json({err:error.message})}
 }) 
