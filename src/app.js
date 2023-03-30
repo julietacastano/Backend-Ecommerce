@@ -1,8 +1,10 @@
 import Express from "express";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
+import cookieParser from "cookie-parser";
 import routerCart from "../routes/routerCarts.js";
 import routerProducts from "../routes/routerProducts.js";
+import routerSessions from "../routes/routerSessions.js";
 import prodManager from "./managers/productManager.js";
 import Product from "./product.js";
 
@@ -11,6 +13,8 @@ const port = 8080
 const app = Express()
 
 app.use('/static', Express.static('./public'))
+
+app.use(cookieParser())
 
 app.use(Express.json())
 app.use(Express.urlencoded({extended:true}))
@@ -21,6 +25,7 @@ app.set('view engine', 'handlebars')
 
 app.use('/api/products', routerProducts)
 app.use('/api/carts',routerCart)
+app.use('/api/sessions', routerSessions)
 
 const serverConected = app.listen(port, ()=>{console.log(`conectado a puerto ${port}`)})
 
