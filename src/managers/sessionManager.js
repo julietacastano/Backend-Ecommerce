@@ -7,23 +7,24 @@ class SessionManager {
     }
 
     //Crear usuario ------------------------------------------------------
-    async addSession({username, email, edad, pass}){
+    async addSession({name, email, edad, pass}){
         const findEmail = await this.model.findOne({email})
 
         if(findEmail){
             return {error:"Email registrado, por favor avanzar a log in"}
         }
 
-        const passHash = hashpass(pass) 
+        const passHash = await hashpass(pass) 
+        console.log(passHash)
 
         const newSession = await this.model.create({
-            username:username,
+            name:name,
             email: email,
             edad: edad,
             pass: passHash,
         })
 
-        return {succes:`Felicitaciones ${newSession.username}, tu cuenta se ha creado correctamente`}
+        return {succes:`Felicitaciones ${newSession.name}, tu cuenta se ha creado correctamente`}
     }
 
     //Login ------------------------------------------------------------------
@@ -47,7 +48,7 @@ class SessionManager {
         const findUser = await this.model.findOne({email})
         if(!findUser){return {error:"Error de autenticacion"}}
 
-        const passHash = hashpass(pass) 
+        const passHash = hashpass(newpass) 
 
         await this.model.updateOne({email:email}, {$set:{pass:passHash}})
 

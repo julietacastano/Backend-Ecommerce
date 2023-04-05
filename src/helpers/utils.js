@@ -1,8 +1,7 @@
 import bcyrpt from "bcrypt";
 
 function hashpass(pass){
-    const salt = bcyrpt.genSalt(10)
-    return bcyrpt.hash(pass, salt)
+    return bcyrpt.hash(pass, 10)
 }
 
 function checkpass(pass, passGuardada){

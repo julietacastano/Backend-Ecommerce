@@ -8,11 +8,13 @@ class Carts{
 
     //Muestra carritos-------------------------------------------
     async getCarts(cartId){
-        const findId = await this.model.findById(cartId)
-        console.log({findId})
+        const findId = await this.model.find({_id:cartId}).lean()
         if(!findId){ 
         return {error:"No se encontro el carrito pedido"}
         }
+        const cartFound = await this.model.find({_id:cartId}).populate('products.product')
+        console.log(cartFound[0].products)
+        return findId
     }
 
     //Crea carrito----------------------------------------------------------
@@ -51,7 +53,7 @@ class Carts{
         const findCartId = await this.model.findById(idCart)
         if(!findCartId){return {error:"No se encontro el carrito pedido"}}
         
-        const cartFound = await this.model.findById(idCart).populate('products.product')
+        const cartFound = await this.model.findById(idCart).populate('Product')
         console.log(cartFound)
         return cartFound
     }

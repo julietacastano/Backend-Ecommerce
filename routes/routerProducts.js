@@ -10,9 +10,10 @@ routerProducts.get('/', async(req,res) => {
     let name = req.query.name
 
     const Products = await prodManager.getProducts(limit, price, name)
+    //console.log(Products)
 
     res.render('home', {
-        titlePage:'Products',
+        titlePage:'Productos',
         products: Products,
     })  
 })
@@ -42,7 +43,18 @@ routerProducts.get('/realtimeproducts', (req,res) => {
 //Mostrar productos por ID--------------------------------------------------------
 routerProducts.get('/:pid', async (req,res)=>{
     const productFound = await prodManager.getProductById(req.params.pid)
-    res.json({productFound})  
+    const prod = productFound.findId
+    if(productFound.error){
+        res.render('templates/message', {
+            titlePage: 'Productos',
+            mensaje: productFound.error
+        })
+    }
+    res.render('detalle',{
+        titlePage:'Producto seleccionado',
+        producto:prod
+    })
+
 }) 
 
 

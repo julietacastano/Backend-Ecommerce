@@ -2,6 +2,7 @@ import Express from "express";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import cookieParser from "cookie-parser";
+import session from "express-session";
 import routerCart from "../routes/routerCarts.js";
 import routerProducts from "../routes/routerProducts.js";
 import routerSessions from "../routes/routerSessions.js";
@@ -22,6 +23,12 @@ app.use(Express.urlencoded({extended:true}))
 app.engine('handlebars', engine())
 app.set('views', './views')
 app.set('view engine', 'handlebars')
+
+app.use(session({
+    secret: '5ecr3t0',
+    resave: false,
+    saveUninitialized: false
+}))
 
 app.use('/api/products', routerProducts)
 app.use('/api/carts',routerCart)

@@ -13,11 +13,11 @@ class ProductManager{
         }
 
         if(priceSort === false){
-            const prodSort = await this.model.find().limit(limit)
+            const prodSort = await this.model.find().limit(limit).lean()
             return prodSort
         }
 
-        const products = this.model.find({name}).limit(limit).sort({price:priceSort}).paginate({price},{limit:5, page:page})
+        const products = this.model.find({name}).limit(limit).sort({price:priceSort}).paginate({price},{limit:5, page:page}).lean()
         return products
     }
 
@@ -59,15 +59,10 @@ class ProductManager{
 
     //Pedir producto por ID -------------------------------------------------
     async getProductById(prodId){
-        const findId = await this.model.findById(prodId)
+        const findId = await this.model.find({_id:prodId}).lean()
+        if(!findId){return {error:"No se encontro el producto"}}
 
-        if(findId){
-            console.log("Enpassmos producto, titulo " + findId.title )
-            return findId
-        }else{
-            console.log("No enpassmos el producto")
-            return {error:"No se encontro el Id ingresado"}
-        }
+        return {findId}
     }
 
     //Actualizar producto ------------------------------------------------------

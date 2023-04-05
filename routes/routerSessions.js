@@ -9,11 +9,10 @@ routerSessions.get('/register', (req,res)=>{
         titlePage:'Registro',
     })  
 })
-routerSessions.post('/api/sessions/register', async (req,res)=>{
-    //const {username, email, edad, pass}
-    if(!req.body.username){res.render('register', {titlePage: 'Registro', error: 'El username es obligatorio'})}
+routerSessions.post('/register', async (req,res)=>{
+    if(!req.body.name){res.render('register', {titlePage: 'Registro', error: 'El nombre es obligatorio'})}
     if(!req.body.email){res.render('register', {titlePage: 'Registro', error: 'El email es obligatorio'})}
-    if(!req.body.pass){res.render('register', {titlePage: 'Registro', error: 'La password es obligatoria'})}
+    if(!req.body.pass){res.render('register', {titlePage: 'Registro', error: 'La contraseña es obligatoria'})}
     
     const addSec = await sessManager.addSession(req.body)
     console.log(addSec)
@@ -38,7 +37,7 @@ routerSessions.get('/login', (req,res)=>{
 })
 routerSessions.post('/login', async (req,res)=>{
     if(!req.body.email){res.render('login', {titlePage: 'Login', error: 'El email es obligatorio'})}
-    if(!req.body.pass){res.render('login', {titlePage: 'Login', error: 'La password es obligatoria'})}
+    if(!req.body.pass){res.render('login', {titlePage: 'Login', error: 'La contraseña es obligatoria'})}
 
     
     const userLog = await sessManager.logIn(req.body)
@@ -52,15 +51,15 @@ routerSessions.post('/login', async (req,res)=>{
         return res.redirect('/api/products')
     }
 
-    //Cambiar password ------------------------------------------------------
+    //Cambiar contraseña ------------------------------------------------------
     routerSessions.get('/olvidePass', (req,res)=>{
         res.render('olvidePass', {
             titlePage:'Recuperar contraseña',
         })  
     })
-    routerSessions.post('/api/sessions/olvidePass', async (req,res)=>{
+    routerSessions.post('/olvidePass', async (req,res)=>{
         if(!req.body.email){res.render('login', {titlePage: 'Login', error: 'El email es obligatorio'})}
-        if(!req.body.pass){res.render('login', {titlePage: 'Login', error: 'La password es obligatoria'})}
+        if(!req.body.pass){res.render('login', {titlePage: 'Login', error: 'La contraseña es obligatoria'})}
 
         const recupass = await sessManager.updatepass(req.body)
 

@@ -1,0 +1,22 @@
+<header class="bg-indigo-400 p-4">
+    <div class="mx-auto flex justify-between items-center flex-wrap ">
+        <h1 class="text-4xl text-center font-semibold uppercase">BookStore</h1>
+        <nav>
+            <a class= "bg-indigo-200 py-3 px-10 rounded-lg" href="/api/products/">Inicio</a>
+            <a class= "bg-indigo-200 py-3 px-10 rounded-lg">Log out</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <h3 class="text-4xl text-center font-light my-5">{{titlePage}}</h3>
+    {{#if carrito}}
+    {{#each carrito}}        
+                <div class=" flex-column justify-between items-center flex-wrap m-10 space-y-4 p-8 pt-5 px-20 shadow-lg">
+                    <div class="font-mono text-center text-sm font-medium">Orden: {{this._id}}</div>
+                </div>
+        {{/each}}
+    {{else}}
+    <h3 class="text-4xl text-center font-semibold">No se encontro el carrito</h3>
+    {{/if}}
+</main>
