@@ -10,10 +10,10 @@ routerCart.get('/:cid', async (req,res)=>{
 })
 
 //Crea un carrito -------------------------------------------------
-routerCart.post('/',(req,res)=>{
+routerCart.post('/',async (req,res)=>{
     try{
-        const newCart = cartsManager.createCart()
-        res.status(200).json(newCart)
+        const newCart = await cartsManager.createCart()
+        res.status(200).json(newCart.succes)
     }catch(error){res.status(400).json({err:error.message})}
 })
 

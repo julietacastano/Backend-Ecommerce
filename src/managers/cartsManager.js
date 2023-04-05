@@ -20,7 +20,7 @@ class Carts{
         const newCart = await this.model.create({
             products:[],
         })
-        return newCart
+        return {succes: `Nuevo carrito creado correctamente. Id: ${newCart._id}`}
     }
 
     //Agregar producto al carrito ---------------------------------------

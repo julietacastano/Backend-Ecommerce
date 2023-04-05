@@ -8,9 +8,10 @@
                 <span class="flex">{{title}}</span>
                 <span class="flex">{{description}}</span>
                 <span class="flex">${{price}}</span>
+                <button class="bg-indigo-600 p-2 rounded text-center text-white" onclick="verDetalle(_id)">Detalle</button>
             {{/each}}
             </li>
-            <button class="bg-indigo-600 p-2 rounded text-center text-white">Agregar al carrito </button>
+            
         {{/each}}
         </ul>
     {{else}}

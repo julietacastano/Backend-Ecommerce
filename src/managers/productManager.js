@@ -62,22 +62,23 @@ class ProductManager{
         const findId = await this.model.findById(prodId)
 
         if(findId){
-            console.log("Encontramos producto, titulo " + findId.title )
+            console.log("Enpassmos producto, titulo " + findId.title )
             return findId
         }else{
-            console.log("No encontramos el producto")
+            console.log("No enpassmos el producto")
             return {error:"No se encontro el Id ingresado"}
         }
     }
 
     //Actualizar producto ------------------------------------------------------
-    async updatePrduct(prodId, {newData}){
+    async updatePrduct(prodId, newData){
         const findId = await this.model.findById(prodId)
         if(!findId){return {error:"No se encontro el carrito pedido"}}
 
-        const productUpdated = await this.model.updateOne({_id:prodId}, {$set:{newData}})
+        Object.assign(findId, newData)
+        await this.model.updateOne({_id:prodId}, {$set:findId})
 
-        return productUpdated
+        return {succes:`Producto ${findId.title} actualizado con exito`}
     }
 
     //Eliminar producto -------------------------------------------------------
@@ -85,11 +86,10 @@ class ProductManager{
         const findId = await this.model.findById(prodId)
         console.log(findId)
         if(!findId){return {error:"No se encontro el carrito pedido"}}
-        const productDelete = await this.model.deleteOne({"_id":prodId})
+        await this.model.deleteOne({_id:prodId})
 
-        return productDelete
+        return {succes:`Producto ${findId.title} eliminado con exito`}
     } 
-
 } 
 
 const prodManager = new ProductManager(productDb)

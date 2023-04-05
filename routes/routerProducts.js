@@ -7,7 +7,7 @@ const routerProducts = Router()
 routerProducts.get('/', async(req,res) => {
     let limit = req.query.limit
     let price = req.query.price
-    let name = req.query.price
+    let name = req.query.name
 
     const Products = await prodManager.getProducts(limit, price, name)
 
@@ -49,17 +49,17 @@ routerProducts.get('/:pid', async (req,res)=>{
 //Editar un producto existente ----------------------------------------------------------------
 routerProducts.put('/:pid', async (req,res)=>{
     try{
-        const updatedProd = await prodManager.updatePrduct({id:req.params.pid}, req.body)
-        res.status(201).json(updatedProd)
-    }catch(error){res.status(400).json({err:error.message})}
+        const updatedProd = await prodManager.updatePrduct(req.params.pid, req.body)
+        res.status(201).json(updatedProd.succes)
+    }catch(error){res.status(400).json(updatedProd.error)}
 })
 
 //Elimiar un producto------------------------------------------------------------------------
-routerProducts.delete('/:pid', (req,res)=>{
+routerProducts.delete('/:pid', async (req,res)=>{
     try {
-        prodManager.deleteProduct(req.params.pid)
-        res.status(201).json(`product deleted`)
-    }catch(error){res.status(400).json({err:error.message})}
+        const prodDeleted = await prodManager.deleteProduct(req.params.pid)
+        res.status(201).json(prodDeleted.succes)
+    }catch(error){res.status(400).json(prodDeleted.error)}
 }) 
 
 export default routerProducts
