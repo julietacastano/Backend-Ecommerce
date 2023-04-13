@@ -1,5 +1,6 @@
 import { sessionDb } from "./mongoManager.js";
 import { hashpass, checkpass } from "../helpers/utils.js";
+//import jwtGenerator from "../helpers/token.js";
 
 class SessionManager {
     constructor (model){
@@ -8,6 +9,10 @@ class SessionManager {
 
     //Crear usuario ------------------------------------------------------
     async addSession({name, email, edad, pass}){
+        if(!name){return {error: 'El nombre es obligatorio'}}
+        if(!email){return {error: 'El email es obligatorio'}}
+        if(!pass){return {error: 'La contraseña es obligatoria'}}
+
         const findEmail = await this.model.findOne({email})
 
         if(findEmail){
@@ -39,7 +44,7 @@ class SessionManager {
         if(!passCheck){
             return {error:'Error de autenticacion'}
         }
-
+        
         return {succes:'Usuario verificado'}
     }
 

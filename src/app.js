@@ -8,6 +8,7 @@ import routerProducts from "../routes/routerProducts.js";
 import routerSessions from "../routes/routerSessions.js";
 import prodManager from "./managers/productManager.js";
 import Product from "./product.js";
+import { passportInitialize, passportSession } from "./middleware/passportConfig.js";
 
 const port = 8080
 
@@ -25,13 +26,15 @@ app.set('views', './views')
 app.set('view engine', 'handlebars')
 
 app.use(session({
-    secret: '5ecr3t0',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }))
 
+app.use(passportInitialize, passportSession) 
+
 app.use('/api/products', routerProducts)
-app.use('/api/carts',routerCart)
+app.use('/api/carts', routerCart)
 app.use('/api/sessions', routerSessions)
 
 const serverConected = app.listen(port, ()=>{console.log(`conectado a puerto ${port}`)})

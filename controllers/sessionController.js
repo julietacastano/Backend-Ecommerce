@@ -1,0 +1,94 @@
+import sessManager from "../src/managers/sessionManager.js";
+
+//Register ---------------------------------------
+const registerForm =  (req,res)=>{
+    res.render('register', {
+        titlePage:'Registro',
+    })  
+}
+const userRegister = async (req,res)=>{
+    // if(!req.body.name){res.render('register', {titlePage: 'Registro', error: 'El nombre es obligatorio'})}
+    // if(!req.body.email){res.render('register', {titlePage: 'Registro', error: 'El email es obligatorio'})}
+    // if(!req.body.pass){res.render('register', {titlePage: 'Registro', error: 'La contraseña es obligatoria'})}
+    // 
+    // const addSec = await sessManager.addSession(req.body)
+    const addSec = req.user 
+    console.log(addSec)
+    console.log(req.session)
+
+    if(addSec.error){
+        {res.render('register', {titlePage: 'Registro', error: addSec.error})}
+    }
+
+    if(addSec.succes){
+        res.render('templates/message', {
+        titlePage: 'usuario registrado',
+        mensaje:addSec.succes
+    })
+    }
+}
+
+//Login ----------------------------------------
+const loginForm = (req,res)=>{
+    res.render('login', {
+        titlePage:'Login',
+    })  
+}
+const userLogin =  async (req,res)=>{
+    // if(!req.body.email){res.render('login', {titlePage: 'Login', error: 'El email es obligatorio'})}
+    // if(!req.body.pass){res.render('login', {titlePage: 'Login', error: 'La contraseña es obligatoria'})}
+// 
+    // 
+    // const userLog = await sessManager.logIn(req.body)
+    const user = req.user
+    console.log(user)
+
+    if(user.error){
+        {res.render('login', {titlePage: 'Login', error: userLog.error})}
+    }
+
+    if(user.succes){
+        // res.send(userLog.succes)
+        return res.redirect('/api/products')
+    }
+    // if(userLog.succes){
+    // const token = jwtGenerator({id:userLog._id, name: userLog.name})
+    //     return res.cookie('_token', token, {
+    //     httpOnly: true,
+    // }).redirect('/api/products')
+    // }
+}
+
+//Cambiar contraseña ----------------------------------------
+const forgetPassForm = (req,res)=>{
+    res.render('olvidePass', {
+        titlePage:'Recuperar contraseña',
+    })  
+}
+const userForgetPass = async (req,res)=>{
+    if(!req.body.email){res.render('login', {titlePage: 'Login', error: 'El email es obligatorio'})}
+    if(!req.body.pass){res.render('login', {titlePage: 'Login', error: 'La contraseña es obligatoria'})}
+
+    const recupass = await sessManager.updatepass(req.body)
+
+    if(recupass.error){
+        {res.render('register', {titlePage: 'Registro', error: addSec.error})}
+    }
+
+    if(recupass.succes){
+        res.render('templates/message', {
+        titlePage: 'Cambio exitoso',
+        mensaje:addSec.succes
+    })
+    }
+}
+
+
+export {
+    registerForm,
+    userRegister,
+    loginForm,
+    userLogin,
+    forgetPassForm,
+    userForgetPass
+}
