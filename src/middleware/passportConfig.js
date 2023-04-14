@@ -4,7 +4,7 @@ import { Strategy as LocalStrategy } from "passport-local"
 import { Strategy as GithubStrategy } from "passport-github2";
 // import {hashpass, checkpass} from "../helpers/utils.js"
 // import { sessionDb } from "../managers/mongoManager.js";
-import sessManager from "../managers/sessionManager.js";
+import { userRegister, userLogin } from "../../controllers/sessionController";
 dotenv.config()
 
 passport.use('login', new LocalStrategy(
@@ -41,9 +41,9 @@ passport.use('github', new GithubStrategy(
             console.log(profile)
             let user
             try {
-                user = await sessManager.addSession(profile)
+                await userLogin(profile)
             } catch (error) {
-                done(error)
+                user = await userRegister(profile)
             }
             done(null, user)
     }
