@@ -1,4 +1,5 @@
 import sessManager from "../src/managers/sessionManager.js";
+import jwtGenerator from "../src/helpers/token.js";
 
 //Register ---------------------------------------
 const registerForm =  (req,res)=>{
@@ -21,7 +22,12 @@ const userRegister = async (req,res)=>{
         res.render('templates/message', {
         titlePage: 'usuario registrado',
         mensaje:addSec.succes
-    })
+        })
+        const token = jwtGenerator({id:req.body._id , name: req.body.name})
+        return res.cookie('tokenJWT', token, {
+                httpOnly: true,
+                maxAge: 60*60*1000,
+            })
     }
 }
 
@@ -46,7 +52,11 @@ const userLogin =  async (req,res)=>{
 
     if(user.succes){
         // res.send(userLog.succes)
-        return res.redirect('/api/products')
+        const token = jwtGenerator({id:req.body._id , name: req.body.name})
+        return res.cookie('tokenJWT', token, {
+                httpOnly: true,
+                maxAge: 60*60*1000,
+            }).redirect('/api/products')
     }
     // if(userLog.succes){
     // const token = jwtGenerator({id:userLog._id, name: userLog.name})
@@ -84,7 +94,9 @@ const userLogout = (req, res, next) =>{
     req.logout(err => {
         res.sendStatus(200)
     })
-    //res.redirect('/api/sessions/login')
+    res.clearCookies('tokenJWT',{   
+        httpOnly:true
+    }).redirect('/api/sessions/login')
 }
 
 

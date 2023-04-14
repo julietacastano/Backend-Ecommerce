@@ -8,7 +8,7 @@ class SessionManager {
     }
 
     //Crear usuario ------------------------------------------------------
-    async addSession({name, email, edad, pass}){
+    async addSession({name, email, edad, pass, rol}){
         if(!name){return {error: 'El nombre es obligatorio'}}
         if(!email){return {error: 'El email es obligatorio'}}
         if(!pass){return {error: 'La contraseña es obligatoria'}}
@@ -27,6 +27,7 @@ class SessionManager {
             email: email,
             edad: edad,
             pass: passHash,
+            rol:rol
         })
 
         return {succes:`Felicitaciones ${newSession.name}, tu cuenta se ha creado correctamente`}

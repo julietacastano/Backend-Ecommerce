@@ -23,6 +23,13 @@
                 <label class="block text-sm text-gray-800 mb-2" for="name">Ingresa una contraseña</label>
                 <input type="password" id="pass" name="pass" class="w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400">
             </div>
+            <div>
+                <label class="block text-sm text-gray-800 mb-2" for="rol"> Rol</label>
+                <select id="rol" name="rol" class="text-sm text-gray-800 w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400">
+                    <option value="user" selected >Usario</option>
+                    <option value="Admin">Administrador</option>
+                </select>
+            </div>
             <div class="flex items-left">
                 <p class="text-gray-500 text-xs mr-2">Ya tenes una cuenta?</p>
                 <a href="/api/sessions/login" class="text-gray-600 text-xs underline">Inicia sesion</a>

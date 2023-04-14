@@ -7,9 +7,10 @@ import dotenv from "dotenv"
 import routerCart from "../routes/routerCarts.js";
 import routerProducts from "../routes/routerProducts.js";
 import routerSessions from "../routes/routerSessions.js";
+import routerAdmin from "../routes/routerAdmin.js";
 import prodManager from "./managers/productManager.js";
 import Product from "./product.js";
-import { passportInitialize, passportSession } from "./middleware/passportConfig.js";
+import { passportInitialize } from "./middleware/passportConfig.js";
 dotenv.config()
 
 const port = 8080
@@ -33,11 +34,12 @@ app.use(session({
     saveUninitialized: false
 }))
 
-app.use(passportInitialize, passportSession) 
+app.use(passportInitialize) 
 
 app.use('/api/products', routerProducts)
 app.use('/api/carts', routerCart)
 app.use('/api/sessions', routerSessions)
+app.use('/api/admin', routerAdmin)
 
 const serverConected = app.listen(port, ()=>{console.log(`conectado a puerto ${port}`)})
 

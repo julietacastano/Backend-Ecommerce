@@ -5,6 +5,7 @@ const sessionSchema = new mongoose.Schema({
     email:{type: String, require:true},
     pass:{type: String, require:true},
     edad: {type:Number},
+    rol:{type:String}
 })
 
 export default sessionSchema
