@@ -3,12 +3,14 @@ import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import dotenv from "dotenv"
 import routerCart from "../routes/routerCarts.js";
 import routerProducts from "../routes/routerProducts.js";
 import routerSessions from "../routes/routerSessions.js";
 import prodManager from "./managers/productManager.js";
 import Product from "./product.js";
 import { passportInitialize, passportSession } from "./middleware/passportConfig.js";
+dotenv.config()
 
 const port = 8080
 

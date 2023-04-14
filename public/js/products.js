@@ -9,3 +9,17 @@ divMain.addEventListener('click', (e)=>{
         //fetch('/api/products/:pid')
     }
 })
+
+
+const logOut = getElementById('logOut')
+
+logOut.addEventListener('submit', event =>{
+    event.preventDefault()
+    fetch('/api/sessions/logout',{
+        method: 'POST',
+    }).then(result => {
+        if(result.status === 200){
+            window.location.reload('/api/sessions/login')
+        }
+    })
+})

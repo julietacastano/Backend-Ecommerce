@@ -1,51 +1,18 @@
 import passport from "passport";
+import dotenv from "dotenv"
 import { Strategy as LocalStrategy } from "passport-local"
+import { Strategy as GithubStrategy } from "passport-github2";
 // import {hashpass, checkpass} from "../helpers/utils.js"
 // import { sessionDb } from "../managers/mongoManager.js";
 import sessManager from "../managers/sessionManager.js";
-
-passport.use('register', new LocalStrategy(
-    {passReqToCallback:true}, 
-    async (req, username, password, done) =>{
-        try {
-            const {name, email, pass, edad} = req.body
-            if(!name){done ({error:"El nombre es obligatorio"})}
-            if(!email){done ({error:"El email es obligatorio"})}
-            if(!pass){done ({error:"La contraseña es obligatoria"})}
-            
-            const addSec = await sessManager.addSession(req.body)
-            console.log(addSec)
-            
-            // const findUser = await sessionDb.findOne({email})
-    
-            // if(findUser){
-                // return done ({error:"Email registrado, por favor avanzar a log in"})
-            // }
-    
-            // const passHash = hashpass(pass) 
-            
-            // const newSession = await sessionDb.create({
-                // name:name,
-                // email: email,
-                // edad: edad,
-                // pass: passHash,
-            // })
-    
-            return done(null, addSec)
-
-        } catch (error) {
-            done(error)
-        }
-    }
-))
+dotenv.config()
 
 passport.use('login', new LocalStrategy(
-    {passReqToCallback:true}, 
-    async (req, username, password, done) =>{
+    {usernameField:'email'}, 
+    async (username, password, done) =>{
         try {
-            const {email, pass} = req.body
-            if(!email){done ({error:"El email es obligatorio"})}
-            if(!pass){done ({error:"La contraseña es obligatoria"})}
+            if(!username){done ({error:"El email es obligatorio"})}
+            if(!password){done ({error:"La contraseña es obligatoria"})}
 
             const userLog = await sessManager.logIn(req.body)
 
@@ -65,6 +32,20 @@ passport.use('login', new LocalStrategy(
         } catch (error) {
             done(error)
         }
+    }
+))
+
+passport.use('github', new GithubStrategy(
+    {clientID: process.env.GITHUB_CLIENTID, clientSecret: process.env.GITHUB_CLIENTSECRET, callbackURL:process.env.GITHUB_CALLBACKURL },
+    async (accessToken, refreshToken, profile, done) => {
+            console.log(profile)
+            let user
+            try {
+                user = await sessManager.addSession(profile)
+            } catch (error) {
+                done(error)
+            }
+            done(null, user)
     }
 ))
 

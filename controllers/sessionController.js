@@ -7,14 +7,11 @@ const registerForm =  (req,res)=>{
     })  
 }
 const userRegister = async (req,res)=>{
-    // if(!req.body.name){res.render('register', {titlePage: 'Registro', error: 'El nombre es obligatorio'})}
-    // if(!req.body.email){res.render('register', {titlePage: 'Registro', error: 'El email es obligatorio'})}
-    // if(!req.body.pass){res.render('register', {titlePage: 'Registro', error: 'La contraseña es obligatoria'})}
-    // 
-    // const addSec = await sessManager.addSession(req.body)
-    const addSec = req.user 
-    console.log(addSec)
-    console.log(req.session)
+    if(!req.body.name){res.render('register', {titlePage: 'Registro', error: 'El nombre es obligatorio'})}
+    if(!req.body.email){res.render('register', {titlePage: 'Registro', error: 'El email es obligatorio'})}
+    if(!req.body.pass){res.render('register', {titlePage: 'Registro', error: 'La contraseña es obligatoria'})}
+    
+    const addSec = await sessManager.addSession(req.body)
 
     if(addSec.error){
         {res.render('register', {titlePage: 'Registro', error: addSec.error})}
@@ -83,6 +80,13 @@ const userForgetPass = async (req,res)=>{
     }
 }
 
+const userLogout = (req, res, next) =>{
+    req.logout(err => {
+        res.sendStatus(200)
+    })
+    //res.redirect('/api/sessions/login')
+}
+
 
 export {
     registerForm,
@@ -90,5 +94,6 @@ export {
     loginForm,
     userLogin,
     forgetPassForm,
-    userForgetPass
+    userForgetPass,
+    userLogout
 }
