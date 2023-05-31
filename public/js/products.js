@@ -15,11 +15,11 @@ const logOut = getElementById('logOut')
 
 logOut.addEventListener('submit', event =>{
     event.preventDefault()
-    fetch('/api/sessions/logout',{
+    fetch('/api/auth/logout',{
         method: 'POST',
     }).then(result => {
         if(result.status === 200){
-            window.location.reload('/api/sessions/login')
+            window.location.reload('/api/auth/login')
         }
     })
 })

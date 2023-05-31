@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { justLogged } from "../src/middleware/justLogged.js";
+import { justLogged } from "../middleware/justLogged.js";
 import { getEmptyCart, createCart, getCart, updateCart, addProdToCart, deleteProdFromCart } from "../controllers/cartController.js";
 
 const routerCart = Router()

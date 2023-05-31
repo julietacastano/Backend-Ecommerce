@@ -1,39 +1,27 @@
 import passport from "passport";
-import dotenv from "dotenv"
 import jwt, { ExtractJwt } from "passport-jwt"
 import { Strategy as LocalStrategy } from "passport-local"
 import { Strategy as GithubStrategy } from "passport-github2";
-// import {hashpass, checkpass} from "../helpers/utils.js"
-// import { sessionDb } from "../managers/mongoManager.js";
-import { userRegister, userLogin } from "../../controllers/sessionController.js";
+import bcrypt from "bcrypt"
+import { sessionDb } from "../managers/mongoManager.js";
 import cookieExtractor from "../helpers/cookieExtractor.js";
-dotenv.config()
 
-passport.use('login', new LocalStrategy(
-    {usernameField:'email'}, 
-    async (username, password, done) =>{
-        try {
-            if(!username){done ({error:"El email es obligatorio"})}
-            if(!password){done ({error:"La contraseña es obligatoria"})}
-
-            const userLog = await sessManager.logIn(req.body)
-
-            // const findUser = await this.model.findOne({email})
-
-            // if(!findUser){
-                // return done ({error:'Error de autenticacion'})
-            // }
-// 
-            // const passCheck = checkpass(pass, findUser.pass)
-            // if(!passCheck){
-                // return done ({error:'Error de autenticacion'})
-            // }
-
-            return done (null, userLog)
-
-        } catch (error) {
-            done(error)
+passport.use('login', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+    }, 
+    async (email, password, done) =>{
+        const usuario = await sessionDb.findOne({email})
+        if(!usuario){
+            return done(null, false, {message: 'Error de autenticación'})
         }
+
+        const verificarPassword = usuario.comparePassword(password)
+        if(!verificarPassword){
+            return done(null, false, {message: 'Error de autenticación'})
+        }
+
+        return done(null, usuario)
     }
 ))
 
@@ -70,17 +58,30 @@ const authJwt = (req, res, next) => {
     })(req, res, next)
 }
 
+passport.serializeUser((usuario, done) => done(null, usuario._id))
+passport.deserializeUser(async(id, done) => {
+    const usuario = await sessionDb.findById(id)
+    return done(null, usuario)
+})
 
 const passportInitialize = passport.initialize()
+const sessionInitialize = passport.session()
 
-const authLocal = passport.authenticate('login', { session: false, failWithError:true})
+const authUser = passport.authenticate('login',{
+    successRedirect: '/products/',
+    failureRedirect: '/auth/login',
+    failureFlash: true,
+    badRequestMessage: 'Ambos campos son obligatorios'
+})
+
 const authGithub = passport.authenticate('github', { session: false, scope: ['user:email'] })
 const authGithubCallback = passport.authenticate('github', { session: false, failWithError: true })
 
 export{
     passportInitialize,
-    authLocal,
+    sessionInitialize,
     authGithub,
     authGithubCallback,
+    authUser,
     authJwt
 }

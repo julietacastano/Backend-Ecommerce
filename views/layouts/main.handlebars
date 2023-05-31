@@ -7,7 +7,36 @@
     <script src="https://cdn.tailwindcss.com"></script> 
     <title>{{title}}</title>
 </head>
-<body class="mt-10">
+<body>
+    {{!-- {{#if error}}
+    <div class="max-w-md mx-auto my-10 alertas"> 
+        <p class="bg-red-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-md">{{error}}</p>
+    </div>
+    {{/if}} --}}
+
+    {{#if err.length}}
+    <div class="max-w-md mx-auto my-10 alertas">
+        {{#each err}}
+            <p class="bg-red-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-md">{{this}}</p>
+        {{/each}}
+    </div>
+    {{/if}}
+    {{#if errores.length}}
+    <div class="max-w-md mx-auto my-10 alertas">
+        {{#each errores}}
+            <p class="bg-red-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-md">{{this.msg}}</p>
+        {{/each}}
+    </div>
+    {{/if}}
+
+    {{#if msg.length}}
+    <div class="max-w-md mx-auto my-10 alertas">
+        {{#each msg}}
+            <p class="bg-green-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-md">{{this}}</p>
+        {{/each}}
+    </div>
+    {{/if}}
+
     {{{body}}}
 </body>
 </html>

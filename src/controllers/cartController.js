@@ -1,9 +1,10 @@
-import cartsManager from "../src/managers/cartsManager.js";
+import cartsManager from "../managers/cartsManager.js";
 
 //Mostrar carrito vacio
 const getEmptyCart = async(req,res)=>{
     res.render('cart',{
-        titlePage:'Carrito'
+        titlePage:'Carrito',
+        usuario:req.user
     })
 }
 //Crea un carrito -------------------------------------------------

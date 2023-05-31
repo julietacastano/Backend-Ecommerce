@@ -1,23 +1,18 @@
 import Express from "express";
-import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import cookieParser from "cookie-parser";
 import session from "express-session";
+import flash from "connect-flash"
 import dotenv from "dotenv"
-import routerCart from "../routes/routerCarts.js";
-import routerProducts from "../routes/routerProducts.js";
-import routerSessions from "../routes/routerSessions.js";
-import routerAdmin from "../routes/routerAdmin.js";
-import prodManager from "./managers/productManager.js";
-import Product from "./product.js";
-import { passportInitialize } from "./middleware/passportConfig.js";
+import routerCart from "./routes/routerCarts.js";
+import routerProducts from "./routes/productsRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+import { passportInitialize, sessionInitialize } from "./middleware/passportConfig.js";
+
 dotenv.config()
 
-const port = 8080
-
 const app = Express()
-
-app.use('/static', Express.static('./public'))
 
 app.use(cookieParser())
 
@@ -28,37 +23,22 @@ app.engine('handlebars', engine())
 app.set('views', './views')
 app.set('view engine', 'handlebars')
 
+app.use('/static', Express.static('./public'))
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }))
 
-app.use(passportInitialize) 
+app.use(passportInitialize, sessionInitialize) 
+app.use(flash());
 
-app.use('/api/products', routerProducts)
-app.use('/api/carts', routerCart)
-app.use('/api/sessions', routerSessions)
-app.use('/api/admin', routerAdmin)
+app.use('/products', routerProducts)
+app.use('/carts', routerCart)
+app.use('/auth', authRoutes)
+app.use('/admin', adminRoutes)
 
-const serverConected = app.listen(port, ()=>{console.log(`conectado a puerto ${port}`)})
+const port = 8080
+app.listen(port, ()=>{console.log(`conectado a puerto ${port}`)})
 
-const io = new Server(serverConected)
-
-io.on('connection', socket =>{
-    console.log('New client connected')
-
-    socket.on('newProduct', productData =>{
-        const newProd = new Product(productData)
-
-        prodManager.addProduct(productData)
-        const getProd = prodManager.getProducts()
-        console.log(getProd)
-        io.sockets.emit('update', getProd)
-    })
-
-    socket.on('refresh', ()=>{
-        const getProd = prodManager.getProducts()
-        io.sockets.emit('update', getProd)
-    })
-})

@@ -1,9 +1,14 @@
 <header class="bg-indigo-400 p-4">
     <div class="mx-auto flex justify-between items-center flex-wrap ">
-        <h1 class="text-4xl text-center font-semibold uppercase">BookStore</h1>
+        <a href="/products" class="text-4xl text-center font-medium font-mono">BookStore</a>
         <nav>
-            <a class= "bg-indigo-200 py-3 px-10 rounded-lg" href="/api/products/">Inicio</a>
-            <a class= "bg-indigo-200 py-3 px-10 rounded-lg">Log out</a>
+            <a class= "py-3 px-3" href="/admin">Administrador</a>
+            <a class= "py-3 px-3" href="/products">Inicio</a>
+            {{#if usuario}}
+            <a href="/auth/logout" class= "py-3 pl-3 pr-10">Cerrar sesion</a>
+            {{else}}
+            <a href="/auth/login" class= "py-3 pl-3 pr-10">Iniciar sesion</a>
+            {{/if}}
         </nav>
     </div>
 </header>

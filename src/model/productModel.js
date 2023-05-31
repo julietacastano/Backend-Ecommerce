@@ -13,4 +13,6 @@ const productSchema = new mongoose.Schema({
 })
 productSchema.plugin(mongoosePaginate)
 
+productSchema.index({titulo: 'text'})
+
 export default productSchema

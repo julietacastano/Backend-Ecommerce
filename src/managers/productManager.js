@@ -6,19 +6,23 @@ class ProductManager{
     }
 
     //Pedir array de productos --------------------------------------------------
-    async getProducts(limit=10,priceSort=false, name='', page=1){
+    async getProducts(pagina, limit, offset){
 
-        if(limit<0){
-            return limit=10
-        }
+        const skip = pagina > 1 ? offset : 0
 
-        if(priceSort === false){
-            const prodSort = await this.model.find().limit(limit).lean()
-            return prodSort
-        }
+        const products = this.model.find().limit(limit).skip(skip).lean()
 
-        const products = this.model.find({name}).limit(limit).sort({price:priceSort}).paginate({price},{limit:5, page:page}).lean()
         return products
+    }
+
+    //Buscador ------------------------------------------------------------
+    async buscador(search){
+        const products = await productDb.find({
+            $text:{$search:search}
+        }).lean()
+
+        return products
+    
     }
 
     //Agregar producto ----------------------------------------------------------------
@@ -35,7 +39,6 @@ class ProductManager{
         }
 
         if(price<0){
-            return {error:"El precio debe ser un numero positivo"}
         }
         if(stock<0){
             return {error:"El stock debe ser un numero positivo"}
@@ -59,10 +62,10 @@ class ProductManager{
 
     //Pedir producto por ID -------------------------------------------------
     async getProductById(prodId){
-        const findId = await this.model.find({_id:prodId}).lean()
-        if(!findId){return {error:"No se encontro el producto"}}
+        const producto = await this.model.findById(prodId).lean()
+        if(!producto){return console.log("No se encontro el producto")}
 
-        return {findId}
+        return {producto}
     }
 
     //Actualizar producto ------------------------------------------------------

@@ -1,7 +1,7 @@
-const adminForm = (req, res, next) =>{
+const penelAdmin = (req, res, next) =>{
     res.render('admin', {
         titlePage:'Solo administradores',
     })  
 }
 
-export {adminForm}
+export {penelAdmin}
