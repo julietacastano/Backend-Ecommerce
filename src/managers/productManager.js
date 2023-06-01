@@ -26,37 +26,23 @@ class ProductManager{
     }
 
     //Agregar producto ----------------------------------------------------------------
-    async addProduct({title, description, price, thumbnail, code, stock, category}){
-
-        const findCode = await this.model.findOne({code})
+    async addProduct({titulo, descripcion, precio, codigo, stock, categoria}){
+        const findCode = await this.model.findOne({codigo})
 
         if(findCode){
-            return {error:"Codigo repetido"}
-        }
-
-        if(!title || !description || !price || !code || !stock || !category){
-            return {error:"Faltan una propiedad"}
-        }
-
-        if(price<0){
-        }
-        if(stock<0){
-            return {error:"El stock debe ser un numero positivo"}
+            return {error:"Código de producto repetido, por favor ingresar uno diferente"}
         }
                 
-        const newProd = await this.model.create({
-            title:title,
-            description: description,
-            price: price,
-            thumbnail: thumbnail,
-            code: code,
+        await this.model.create({
+            titulo:titulo,
+            descripcion: descripcion,
+            precio: precio,
+            codigo: codigo,
             stock: stock,
-            category: category
+            categoria: categoria
         })
-
-        console.log(newProd)
         
-        return {succes:'El producto fue agregado correctamente' + newProd}
+        return {succes:'El producto fue agregado correctamente'}
 
     }  
 
@@ -76,7 +62,7 @@ class ProductManager{
         Object.assign(findId, newData)
         await this.model.updateOne({_id:prodId}, {$set:findId})
 
-        return {succes:`Producto ${findId.title} actualizado con exito`}
+        return {succes:`Producto ${findId.titulo} actualizado con exito`}
     }
 
     //Eliminar producto -------------------------------------------------------
@@ -86,7 +72,7 @@ class ProductManager{
         if(!findId){return {error:"No se encontro el carrito pedido"}}
         await this.model.deleteOne({_id:prodId})
 
-        return {succes:`Producto ${findId.title} eliminado con exito`}
+        return {succes:`Producto ${findId.titulo} eliminado con exito`}
     } 
 } 
 

@@ -1,20 +1,20 @@
-<header class="bg-indigo-400 p-4">
-    <div class="mx-auto flex justify-between items-center flex-wrap ">
-        <a href="/products" class="text-4xl text-center font-medium font-mono">BookStore</a>
-        <nav>
-            <a class= "py-3 px-3" href="/admin">Administrador</a>
-            <a class= "py-3 px-3" href="/products">Inicio</a>
+<header class="bg-indigo-800 p-4">
+    <div class="mx-auto flex justify-between items-center flex-wrap h-20">
+        <a href="/products"><img src="/static/logo/logo2.png" alt="Logo del comercio"  class="h-20"></a>
+        <nav class="">
+            <a class= "py-3 px-3 text-red-100" href="/admin">Administrador</a>
+            <a class= "py-3 px-3 text-red-100" href="/carts">Carrito</a>
             {{#if usuario}}
-            <a href="/auth/logout" class= "py-3 pl-3 pr-10">Cerrar sesion</a>
+            <a href="/auth/logout" class= "py-3 pl-3 pr-10 text-red-100">Cerrar sesion</a>
             {{else}}
-            <a href="/auth/login" class= "py-3 pl-3 pr-10">Iniciar sesion</a>
+            <a href="/auth/login" class= "py-3 pl-3 pr-10 text-red-100">Iniciar sesion</a>
             {{/if}}
         </nav>
     </div>
 </header>
 
 <main>
-    <h3 class="text-4xl text-center font-light my-5">{{titlePage}}</h3>
+    <h3 class="text-4xl text-center font-light my-5">{{nombrePagina}}</h3>
     {{#if carrito}}
     {{#each carrito}}        
                 <div class=" flex-column justify-between items-center flex-wrap m-10 space-y-4 p-8 pt-5 px-20 shadow-lg">
@@ -22,6 +22,6 @@
                 </div>
         {{/each}}
     {{else}}
-    <h3 class="text-4xl text-center font-semibold">No se encontro el carrito</h3>
+    <h3 class="text-xl text-center font-semibold">Todavía no agregaste nada al carrito</h3>
     {{/if}}
 </main>

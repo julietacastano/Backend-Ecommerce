@@ -1,32 +1,35 @@
-<header class="bg-indigo-400 p-4">
-    <div class="mx-auto flex justify-between items-center flex-wrap ">
-        <a href="/products" class="text-4xl text-center font-medium font-mono">BookStore</a>
-        <nav>
-            <a class= "py-3 px-3" href="/admin">Administrador</a>
-            <a class= "py-3 px-3" href="/carts">Carrito</a>
+<header class="bg-indigo-800 p-4">
+    <div class="mx-auto flex justify-between items-center flex-wrap h-20">
+        <a href="/products"><img src="/static/logo/logo2.png" alt="Logo del comercio"  class="h-20"></a>
+        <nav class="">
+            <a class= "py-3 px-3 text-red-100" href="/admin">Administrador</a>
+            <a class= "py-3 px-3 text-red-100" href="/carts">Carrito</a>
             {{#if usuario}}
-            <a href="/auth/logout" class= "py-3 pl-3 pr-10">Cerrar sesion</a>
+            <a href="/auth/logout" class= "py-3 pl-3 pr-10 text-red-100">Cerrar sesion</a>
             {{else}}
-            <a href="/auth/login" class= "py-3 pl-3 pr-10">Iniciar sesion</a>
+            <a href="/auth/login" class= "py-3 pl-3 pr-10 text-red-100">Iniciar sesion</a>
             {{/if}}
         </nav>
     </div>
 </header>
 
 <main>
-    <h3 class="text-4xl text-center font-light my-5">{{titlePage}}</h3>
+    <h3 class="text-4xl text-center font-light my-5">{{nombrePagina}}</h3>
     <div class="bg-white shadow rounded-lg md:m-5 m-15">
         {{#if producto}}
             {{#each producto}}        
                 <div class="px-5 py-10 space-y-5">
-                    <h4 class="text-lg font-semibold mb-3">{{this.title}}</h4>
-                    <p class="text-sm text-gray-600 mb-3">Description: 
-                        <span class="text-gray-800 font-medium">{{this.description}}</span>
+                    <h4 class="text-lg font-semibold mb-3">{{this.titulo}}</h4>
+                    <p class="text-sm text-gray-600 mb-3">Descripción: 
+                        <span class="text-gray-800 font-medium">{{this.descripcion}}</span>
                     </p>
-                    <p class="text-sm text-gray-600 mb-10">Price:  
-                        <span class="text-gray-800 font-medium">${{this.price}}</span>
+                    <p class="text-sm text-gray-600 mb-3">Categoria: 
+                        <span class="text-gray-800 font-medium">{{this.categoria}}</span>
                     </p>
-                    <button id={{this._id}} class="buttonDetalle bg-indigo-600 p-2 rounded text-center text-white">Agregar al carrito</button>
+                    <p class="text-sm text-gray-600 mb-10">Precio:  
+                        <span class="text-gray-800 font-medium">${{this.precio}}</span>
+                    </p>
+                    <button id={{this._id}} class="bg-indigo-800 text-red-100 p-2 rounded text-center text-white">Agregar al carrito</button>
                 </div>
             {{/each}}
         {{else}}

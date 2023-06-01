@@ -8,7 +8,7 @@ const registerForm =  (req,res)=>{
     const msg = req.flash('message')
 
     res.render('register', {
-        titlePage:'Registro',
+        nombrePagina:'Registro',
         err,
         msg
     })  
@@ -21,7 +21,7 @@ const userRegister = async (req,res)=>{
     let resultadoErrores = validationResult(req)
     if(!resultadoErrores.isEmpty()){
         return res.render('register', {
-            titlePage:'Registro',
+            nombrePagina:'Registro',
             errores:resultadoErrores.array()
         })  
     }
@@ -51,7 +51,7 @@ const loginForm = (req,res)=>{
     const msg = req.flash('message')
 
     res.render('login', {
-        titlePage:'Login',
+        nombrePagina:'Iniciar sesion',
         err,
         msg
     })  
@@ -63,7 +63,7 @@ const olvidePassForm = (req,res)=>{
     const msg = req.flash('message')
 
     res.render('olvidePass', {
-        titlePage:'Recuperar contraseña',
+        nombrePagina:'Recuperar contraseña',
         err,
         msg
     })  
@@ -75,7 +75,7 @@ const olvidePass = async (req,res)=>{
     let resultadoErrores = validationResult(req)
     if(!resultadoErrores.isEmpty()){
         return res.render('olvidePass', {
-            titlePage:'Recuperar contraseña',
+            nombrePagina:'Recuperar contraseña',
             errores:resultadoErrores.array()
         })  
     }

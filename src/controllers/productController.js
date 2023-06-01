@@ -1,5 +1,4 @@
 import prodManager from "../managers/productManager.js";
-import { productDb } from "../managers/mongoManager.js";
 
 //Muestra todos los productos con un limit -------------------------------------
 const getProducts = async(req,res) => {
@@ -15,14 +14,14 @@ const getProducts = async(req,res) => {
     const products = await prodManager.getProducts(pagina, limit, offset)
 
     
-    const error = req.flash('error')
-    const message = req.flash('message')
+    const err = req.flash('error')
+    const msg = req.flash('message')
     res.render('home', {
-        titlePage:'Productos',
+        nombrePagina:'Productos',
         products: products,
         usuario:req.user,
-        error,
-        message,
+        err,
+        msg,
         pagina
     })  
 }
@@ -32,7 +31,7 @@ const buscador = async (req,res) =>{
     const products = await prodManager.buscador(search)
     
     res.render('home', {
-        titlePage:'Productos',
+        nombrePagina:'Productos',
         products,
         usuario:req.user,
         buscador:true,
@@ -49,22 +48,10 @@ const getProdById = async (req,res)=>{
     }
 
     res.render('detalle',{
-        titlePage:'Producto seleccionado',
+        nombrePagina:'Producto seleccionado',
         producto:product,
     })
 
-}
-
-//Agregar un producto nuevo ------------------------------------------
-const addProduct = async(req,res)=>{
-    const addProd = await prodManager.addProduct(req.body)
-    console.log(addProd)
-
-    if(addProd.error){
-        return res.status(404).json(addProd)
-    }
-    return res.status(201).json(addProd)
-    
 }
 
 //Editar un producto existente ----------------------------------------------------------------
@@ -87,7 +74,6 @@ export {
     getProducts,
     buscador,
     getProdById,
-    addProduct,
     updateProd,
     deleteProd
 }

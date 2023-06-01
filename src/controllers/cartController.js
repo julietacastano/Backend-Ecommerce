@@ -3,7 +3,7 @@ import cartsManager from "../managers/cartsManager.js";
 //Mostrar carrito vacio
 const getEmptyCart = async(req,res)=>{
     res.render('cart',{
-        titlePage:'Carrito',
+        nombrePagina:'Carrito',
         usuario:req.user
     })
 }
@@ -19,7 +19,7 @@ const createCart = async (req,res)=>{
 const getCart = async (req,res)=>{
     const cartFound = await cartsManager.getCarts(req.params.cid) 
     res.render('cart',{
-        titlePage:'Carrito',
+        nombrePagina:'Carrito',
         carrito: cartFound
     })
 }
