@@ -5,6 +5,11 @@ class ProductManager{
         this.model = model
     }
 
+    async allProds(){
+        const productos = this.model.find()
+        return productos
+    }
+
     //Productos --------------------------------------------------
     async getProducts(pagina, limit, offset){
 

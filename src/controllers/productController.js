@@ -8,12 +8,20 @@ const getProducts = async(req,res) => {
         return res.redirect('/products?pagina=1')
     }
 
-    const limit = 2
+    const limit = 4
     const offset = ((pagina * limit) - limit)
 
     const products = await prodManager.getProducts(pagina, limit, offset)
 
-    
+    const todosProds = await prodManager.allProds()
+    let total = todosProds.length
+    let pages = Math.ceil(total/limit)
+    const cantPag = []
+
+    for(let i=1; i<=pages ; i++){
+        cantPag.push(i)
+    }
+
     const err = req.flash('error')
     const msg = req.flash('message')
     res.render('home', {
@@ -22,7 +30,8 @@ const getProducts = async(req,res) => {
         usuario:req.user,
         err,
         msg,
-        pagina
+        pagina,
+        cantPag
     })  
 }
 //Buscador ------------------------------------------------------------
@@ -34,7 +43,6 @@ const buscador = async (req,res) =>{
         nombrePagina:'Productos',
         products,
         usuario:req.user,
-        buscador:true,
     })  
 }
 

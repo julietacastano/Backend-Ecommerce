@@ -1,8 +1,3 @@
-// document.addEventListener('DOMContentLoaded', ()=>{
-    // const listadoProd = document.querySelector('.panel-admin');
-    // listadoProd.addEventListener('click', eliminar)
-// })
-
 const eliminar = e => {
     e.preventDefault()
 

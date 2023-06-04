@@ -14,12 +14,22 @@ const penelAdmin = async (req, res, next) =>{
 
     const products = await prodManager.getProducts(pagina, limit, offset)
 
+    const todosProds = await prodManager.allProds()
+    let total = todosProds.length
+    let pages = Math.ceil(total/limit)
+    const cantPag = []
+
+    for(let i=1; i<=pages ; i++){
+        cantPag.push(i)
+    }
+
     const msg = req.flash('message')
     
     res.render('admin', {
         nombrePagina:'Panel de administración',
         products,
-        msg
+        cantPag,
+        msg,
     })  
 }
 

@@ -39,10 +39,12 @@
         <h3 class="text-xl text-center">No hay productos publicados</h3>
     {{/if}}
     </div>
+    {{#if cantPag}}
     <div class="flex justify-center align-center mb-10">
-        <a href="/admin?pagina=1" class="mx-5 relative inline-flex intems-center px-4 py-2 border border-gray-800 text-gray-700 hover:bg-indigo-50 text-sm font-medium rounded-md"> 1 </a>
-        <a href="/admin?pagina=2" class="mx-5 relative inline-flex intems-center px-4 py-2 border border-gray-800 text-gray-700 hover:bg-indigo-50 text-sm font-medium rounded-md"> 2 </a>
-        <a href="/admin?pagina=3" class="mx-5 relative inline-flex intems-center px-4 py-2 border border-gray-800 text-gray-700 hover:bg-indigo-50 text-sm font-medium rounded-md"> 3 </a>
+        {{#each cantPag}}
+            <a href="/admin?pagina={{this}}" class="mx-5 relative inline-flex intems-center px-4 py-2 border border-gray-800 text-gray-700 hover:bg-indigo-50 text-sm font-medium rounded-md">{{this}}</a>
+        {{/each}}
     </div>
+    {{/if}}
 </main>
 <script src="/static/js/admin.js"></script>
