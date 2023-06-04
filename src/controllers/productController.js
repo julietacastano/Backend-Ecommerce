@@ -54,26 +54,8 @@ const getProdById = async (req,res)=>{
 
 }
 
-//Editar un producto existente ----------------------------------------------------------------
-const updateProd = async (req,res)=>{
-    try{
-        const updatedProd = await prodManager.updatePrduct(req.params.pid, req.body)
-        res.status(201).json(updatedProd.succes)
-    }catch(error){res.status(400).json(updatedProd.error)}
-}
-
-//Elimiar un producto------------------------------------------------------------------------
-const deleteProd =  async (req,res)=>{
-    try {
-        const prodDeleted = await prodManager.deleteProduct(req.params.pid)
-        res.status(201).json(prodDeleted.succes)
-    }catch(error){res.status(400).json(prodDeleted.error)}
-}
-
 export {
     getProducts,
     buscador,
-    getProdById,
-    updateProd,
-    deleteProd
+    getProdById
 }

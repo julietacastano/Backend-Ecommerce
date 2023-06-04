@@ -5,7 +5,7 @@ class ProductManager{
         this.model = model
     }
 
-    //Pedir array de productos --------------------------------------------------
+    //Productos --------------------------------------------------
     async getProducts(pagina, limit, offset){
 
         const skip = pagina > 1 ? offset : 0
@@ -23,6 +23,14 @@ class ProductManager{
 
         return products
     
+    }
+
+    //Producto por ID -------------------------------------------------
+    async getProductById(prodId){
+        const producto = await this.model.findById(prodId).lean()
+        if(!producto){return console.log("No se encontro el producto")}
+
+        return {producto}
     }
 
     //Agregar producto ----------------------------------------------------------------
@@ -46,21 +54,12 @@ class ProductManager{
 
     }  
 
-    //Pedir producto por ID -------------------------------------------------
-    async getProductById(prodId){
-        const producto = await this.model.findById(prodId).lean()
-        if(!producto){return console.log("No se encontro el producto")}
-
-        return {producto}
-    }
-
-    //Actualizar producto ------------------------------------------------------
+    //Editar producto ------------------------------------------------------
     async updatePrduct(prodId, newData){
-        const findId = await this.model.findById(prodId)
-        if(!findId){return {error:"No se encontro el carrito pedido"}}
+        const findId = await this.model.findById(prodId).lean()
+        if(!findId){return {error:"No se encontro el producto pedido"}}
 
-        Object.assign(findId, newData)
-        await this.model.updateOne({_id:prodId}, {$set:findId})
+        await this.model.findOneAndUpdate({_id:prodId}, newData)
 
         return {succes:`Producto ${findId.titulo} actualizado con exito`}
     }
@@ -68,11 +67,12 @@ class ProductManager{
     //Eliminar producto -------------------------------------------------------
     async deleteProduct(prodId){
         const findId = await this.model.findById(prodId)
-        console.log(findId)
         if(!findId){return {error:"No se encontro el carrito pedido"}}
+        
         await this.model.deleteOne({_id:prodId})
-
+        
         return {succes:`Producto ${findId.titulo} eliminado con exito`}
+
     } 
 } 
 

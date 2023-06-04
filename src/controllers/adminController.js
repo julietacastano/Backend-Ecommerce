@@ -51,7 +51,7 @@ const publicarProducto = async(req,res)=>{
     const agregarProd = await prodManager.addProduct(req.body)
 
     if(agregarProd.error){
-        console.log(agregarProd.error)
+        const completado = req.body
         return res.render('crear', {
             nombrePagina:'Registro',
             errores:[{msg:`${agregarProd.error}`}],
@@ -63,9 +63,75 @@ const publicarProducto = async(req,res)=>{
     res.redirect('/admin')
 }
 
+//Editar producto  ----------------------------------------------------------------
+const editarProductoForm = async (req,res)=>{
+    const id = req.params.pid
+    const producto = await prodManager.getProductById(id)
+
+    if(producto.error){
+        req.flash('error', `${producto.error}`)
+        return res.redirect('/admin?pagina=1')
+    }
+
+    res.render('editar',{
+        nombrePagina:`Editar producto: ${producto.producto.titulo}`,
+        producto,
+    })
+
+}
+const editarProducto = async (req,res) => {
+    await check('titulo').notEmpty().withMessage('El titulo no puede estar vacio').run(req)
+    await check('descripcion').notEmpty().withMessage('La descripción no puede estar vacia').run(req)
+    await check('precio').isFloat({min:1}).withMessage('El precio debe ser mayor a 0').run(req)
+    await check('codigo').notEmpty().withMessage('El código no puede estar vacio').run(req)
+    await check('stock').isNumeric().withMessage('El stock no puede estar vacio').run(req)
+    await check('categoria').notEmpty().withMessage('Por favor elegi una categoria').run(req)
+
+    let resultadoErrores = validationResult(req)
+    
+    const id = req.params.pid
+    const producto = await prodManager.getProductById(id)
+
+    if(!resultadoErrores.isEmpty()){
+        return res.render('editar', {
+            nombrePagina:`Editar producto: ${producto.producto.titulo}`,
+            errores:resultadoErrores.array(),
+            producto,
+        })
+    }
+
+    const prodEditado = await prodManager.updatePrduct(id, req.body)
+
+    if(prodEditado.error){
+        req.flash('error', `${prodEditado.error}`)
+        return res.redirect('/admin?pagina=1')
+    }
+
+    req.flash('message', `${prodEditado.succes}`)
+    res.redirect('/admin')
+}
+
+//Elimiar un producto------------------------------------------------------------------------
+const eliminarProducto =  async (req,res, next)=>{
+    const prodDeleted = await prodManager.deleteProduct(req.params.pid)
+
+    if(prodDeleted.error){
+        req.flash('error', `${prodDeleted.error}`)
+        res.status(403).send('Error')
+    }
+    
+    req.flash('message', `${prodDeleted.succes}`)
+    res.status(200).send(`${prodDeleted.succes}`)
+
+}
+
+
 //Exports -----------------------------------
 export {
     penelAdmin,
     crearProducto,
-    publicarProducto
+    publicarProducto,
+    editarProductoForm,
+    editarProducto,
+    eliminarProducto
 }
