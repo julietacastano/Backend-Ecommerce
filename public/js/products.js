@@ -1,25 +1,37 @@
-import cartsManager from "../../src/managers/cartsManager.js"
+const eliminarProdCarrito = e => {
+    e.preventDefault()
 
-const divMain = document.getElementById("divMain")
-console.log(divMain)
+    console.log(e.target.dataset.eliminar)
 
-divMain.addEventListener('click', (e)=>{
-    if(e.target.classList.contains('buttonDetalle')){
-        const idProd = e.target.id
-        //fetch('/api/products/:pid')
+    if(e.target.dataset.eliminar){
+        let dataset = e.target.dataset.eliminar
+        fetch(`/carts/eliminar/${dataset}`,{
+            method: 'DELETE',
+        }).then(result => {
+            if(result.status === 200){
+                window.location.reload()
+            }
+        })       
+    }else if(e.target.tagName === 'A'){
+        window.location.href = e.target.href}
+}
+
+const listadoProdCart = document.querySelector('.panel-carrito');
+listadoProdCart.addEventListener('click', eliminarProdCarrito)
+
+const vaciar = e => {
+    e.preventDefault()
+    if(e.target.classList.contains('vaciar-carrito')){
+        fetch('/carts/vaciarCarrito',{
+            method: 'DELETE',
+        }).then(result => {
+            if(result.status === 200){
+                window.location.reload()
+            }
+        }) 
+
     }
-})
+}
+const vaciarCarrito = document.querySelector('.vaciar-carrito');
+vaciarCarrito.addEventListener('click', vaciar)
 
-
-const logOut = getElementById('logOut')
-
-logOut.addEventListener('submit', event =>{
-    event.preventDefault()
-    fetch('/api/auth/logout',{
-        method: 'POST',
-    }).then(result => {
-        if(result.status === 200){
-            window.location.reload('/api/auth/login')
-        }
-    })
-})

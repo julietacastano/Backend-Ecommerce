@@ -3,8 +3,8 @@
         <a href="/products"><img src="/static/logo/logo2.png" alt="Logo del comercio"  class="h-20"></a>
         <nav class="">
             <a class= "py-3 px-3 text-red-100" href="/admin">Administrador</a>
-            <a class= "py-3 px-3 text-red-100" href="/carts">Carrito</a>
             {{#if usuario}}
+            <a class= "py-3 px-3 text-red-100" href="/carts/{{carrito}}">Carrito</a>
             <a href="/auth/logout" class= "py-3 pl-3 pr-10 text-red-100">Cerrar sesion</a>
             {{else}}
             <a href="/auth/login" class= "py-3 pl-3 pr-10 text-red-100">Iniciar sesion</a>
@@ -14,6 +14,20 @@
 </header>
 
 <main>
+    {{#if err.length}}
+    <div class="max-w-md mx-auto my-10 alertas">
+        {{#each err}}
+            <p class="bg-red-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-md">{{this}}</p>
+        {{/each}}
+    </div>
+    {{/if}}
+    {{#if msg.length}}
+    <div class="max-w-md mx-auto my-10 alertas">
+        {{#each msg}}
+            <p class="bg-green-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-md">{{this}}</p>
+        {{/each}}
+    </div>
+    {{/if}}
     <h3 class="text-4xl text-center font-light my-5">{{nombrePagina}}</h3>
     <div class="bg-white shadow rounded-lg md:m-5 m-15">
         {{#if producto}}
@@ -29,15 +43,14 @@
                     <p class="text-sm text-gray-600 mb-10">Precio:  
                         <span class="text-gray-800 font-medium">${{this.precio}}</span>
                     </p>
-                    <button id={{this._id}} class="bg-indigo-800 text-red-100 p-2 rounded text-center text-white">Agregar al carrito</button>
+                    <form action="/carts/agregarProd/{{this._id}}" method="POST"> 
+                        <input type="submit" value="Agregar al carrito" class="bg-indigo-800 text-red-100 py-2 px-5 rounded text-center text-white cursor-pointer">
+                    </form>
                 </div>
             {{/each}}
         {{else}}
         <h3 class="text-4xl text-center font-semibold">No se encontro el producto</h3>
         {{/if}}
-    </div>
-    <div class="text-gray-600 text-xs underline text-center">
-        <a href="/products/">Volver a Inicio</a>
     </div>
 </main>
 <script src="/static/js/products.js"></script>

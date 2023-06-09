@@ -3,8 +3,8 @@
         <a href="/products"><img src="/static/logo/logo2.png" alt="Logo del comercio"  class="h-20"></a>
         <nav class="">
             <a class= "py-3 px-3 text-red-100" href="/admin">Administrador</a>
-            <a class= "py-3 px-3 text-red-100" href="/carts">Carrito</a>
             {{#if usuario}}
+            <a class= "py-3 px-3 text-red-100" href="/carts/{{carrito}}">Carrito</a>
             <a href="/auth/logout" class= "py-3 pl-3 pr-10 text-red-100">Cerrar sesion</a>
             {{else}}
             <a href="/auth/login" class= "py-3 pl-3 pr-10 text-red-100">Iniciar sesion</a>
@@ -69,4 +69,3 @@
     {{/if}}
 
 </main>
-<script src="/static/js/products.js"></script>

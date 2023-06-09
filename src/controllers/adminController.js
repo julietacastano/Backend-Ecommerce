@@ -24,12 +24,13 @@ const penelAdmin = async (req, res, next) =>{
     }
 
     const msg = req.flash('message')
-    
+    const err = req.flash('error')
     res.render('admin', {
         nombrePagina:'Panel de administración',
         products,
         cantPag,
         msg,
+        err
     })  
 }
 

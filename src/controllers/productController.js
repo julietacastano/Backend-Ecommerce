@@ -22,12 +22,15 @@ const getProducts = async(req,res) => {
         cantPag.push(i)
     }
 
+    const carrito = req.user?.carrito
+
     const err = req.flash('error')
     const msg = req.flash('message')
     res.render('home', {
         nombrePagina:'Productos',
         products: products,
         usuario:req.user,
+        carrito,
         err,
         msg,
         pagina,
@@ -38,7 +41,8 @@ const getProducts = async(req,res) => {
 const buscador = async (req,res) =>{
     const search = req.body.q
     const products = await prodManager.buscador(search)
-    
+
+
     res.render('home', {
         nombrePagina:'Productos',
         products,
@@ -55,9 +59,17 @@ const getProdById = async (req,res)=>{
         return res.redirect('/products?pagina=1')
     }
 
+    const carrito = req.user?.carrito
+
+    const err = req.flash('error')
+    const msg = req.flash('message')
     res.render('detalle',{
         nombrePagina:'Producto seleccionado',
         producto:product,
+        usuario:req.user,
+        carrito,
+        err,
+        msg
     })
 
 }

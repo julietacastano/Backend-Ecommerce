@@ -4,8 +4,8 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash"
 import dotenv from "dotenv"
-import routerCart from "./routes/routerCarts.js";
-import routerProducts from "./routes/productsRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+import productsRoutes from "./routes/productsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import { passportInitialize, sessionInitialize } from "./middleware/passportConfig.js";
@@ -34,8 +34,8 @@ app.use(session({
 app.use(passportInitialize, sessionInitialize) 
 app.use(flash());
 
-app.use('/products', routerProducts)
-app.use('/carts', routerCart)
+app.use('/products', productsRoutes)
+app.use('/carts', cartRoutes)
 app.use('/auth', authRoutes)
 app.use('/admin', adminRoutes)
 

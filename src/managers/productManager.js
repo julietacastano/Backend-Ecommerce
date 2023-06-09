@@ -22,9 +22,27 @@ class ProductManager{
 
     //Buscador ------------------------------------------------------------
     async buscador(search){
-        const products = await productDb.find({
-            $text:{$search:search}
-        }).lean()
+        // const products = await this.model.find({
+        //     $text:{$search:`${search}`}
+        // })
+
+        const products = await this.model.aggregate(
+            [
+                {
+                $search: {
+                    index: "default",
+                    text: {
+                    query: `${search}`,
+                    path: {
+                        wildcard: "*"
+                    }
+                    }
+                }
+                }
+            ]
+        )
+
+        // console.log(products)
 
         return products
     
@@ -33,7 +51,7 @@ class ProductManager{
     //Producto por ID -------------------------------------------------
     async getProductById(prodId){
         const producto = await this.model.findById(prodId).lean()
-        if(!producto){return console.log("No se encontro el producto")}
+        if(!producto){return {error:"No se encontro el producto pedido"}}
 
         return {producto}
     }

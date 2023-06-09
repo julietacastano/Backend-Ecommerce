@@ -6,7 +6,11 @@ const sessionSchema = new mongoose.Schema({
     email:{type: String, require:true},
     password:{type: String, require:true},
     edad: {type:Number},
-    rol:{type:String, lowercase:true,}
+    rol:{type:String, lowercase:true,},
+    carrito:{
+        type: mongoose.Schema.ObjectId,
+        ref:'cart'
+    }
 })
 
 sessionSchema.pre('save', async function(next){
