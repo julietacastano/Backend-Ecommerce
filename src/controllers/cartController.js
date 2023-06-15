@@ -39,13 +39,19 @@ const getCart = async (req,res)=>{
 
     for(let i=0; i<productos?.length; i++){
         let id = productos[i]._id
+        let quan = productos[i].quantity
         let prodEncontrado = await productDb.findById(id).lean()
+        let precioAcc = (prodEncontrado.precio * quan)
 
-        prodsCarrito.push(prodEncontrado)
-        valorTotal += prodEncontrado.precio
+        let prod = {...prodEncontrado, quantity:quan, precioAcc:precioAcc}
+        // console.log(prod)
+
+        prodsCarrito.push(prod)
+        valorTotal += (prodEncontrado.precio * quan)
     }
 
-
+    // let precioAcc = prodsCarrito.precio * prodsCarrito.quantity
+    // console.log(prodsCarrito)
     const msg = req.flash('message')
     const err = req.flash('error')
     res.render('cart',{
@@ -145,11 +151,56 @@ const vaciarCart = async(req,res) => {
 
 }
 
+//Manejar cantidades
+const sumarQuantity = async (req,res) => {
+    const carritoUsuario = req.user.carrito
+    if(!carritoUsuario){
+        req.flash('error', 'No se encontro el carrito solicitado')
+        return res.redirect('/products')
+    }
+
+    const carritoActualizado = await cartsManager.sumarCantidad(carritoUsuario, req.params.pid)
+    
+    if(carritoActualizado.error){
+        req.flash('error', `${carritoActualizado.error}`)
+        res.status(403)
+    }
+    res.status(200).send(`${carritoActualizado.succes}`)
+
+}
+const restarQuantity = async (req,res) => {
+    const carritoUsuario = req.user.carrito
+    if(!carritoUsuario){
+        req.flash('error', 'No se encontro el carrito solicitado')
+        return res.redirect('/products')
+    }
+
+    const carritoActualizado = await cartsManager.restarCantidad(carritoUsuario, req.params.pid)
+
+    if(carritoActualizado.error){
+        req.flash('error', `${carritoActualizado.error}`)
+        res.status(403)
+    }
+    res.status(200).send(`${carritoActualizado.succes}`)
+}
+
+//Resumen
+const getSummary = (req,res) => {
+    res.render('resumen',{
+        nombrePagina:'Resumen de compra',
+    })
+}
+
+
+
 //Exports --------------------------------------------------------------------
 export {
     getEmptyCart,
     getCart,
     addProdToCart,
     deleteProdCart,
-    vaciarCart
+    vaciarCart,
+    sumarQuantity,
+    restarQuantity,
+    getSummary,
 }

@@ -1,0 +1,32 @@
+<header class="bg-indigo-800 p-4">
+    <div class="mx-auto flex justify-between items-center flex-wrap h-20">
+        <a href="/products"><img src="/static/logo/logo2.png" alt="Logo del comercio"  class="h-20"></a>
+        <nav class="">
+            <a class= "py-3 px-3 text-red-100" href="/admin">Administrador</a>
+            <a class= "py-3 px-3 text-red-100" href="/products">Inicio</a>
+            {{#if usuario}}
+            <a href="/auth/logout" class= "py-3 pl-3 pr-10 text-red-100">Cerrar sesion</a>
+            {{else}}
+            <a href="/auth/login" class= "py-3 pl-3 pr-10 text-red-100">Iniciar sesion</a>
+            {{/if}}
+        </nav>
+    </div>
+</header>
+
+<main>
+    {{#if err.length}}
+    <div class="max-w-md mx-auto my-10 alertas">
+        {{#each err}}
+            <p class="bg-red-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-md">{{this}}</p>
+        {{/each}}
+    </div>
+    {{/if}}
+    {{#if msg.length}}
+    <div class="max-w-md mx-auto my-10 alertas">
+        {{#each msg}}
+            <p class="bg-green-600 text-white uppercase text-xs text-center p-2 mb-1 font-bold rounded-md">{{this}}</p>
+        {{/each}}
+    </div>
+    {{/if}}
+    <h3 class="text-4xl text-center font-light my-5">{{nombrePagina}}</h3>
+</main>

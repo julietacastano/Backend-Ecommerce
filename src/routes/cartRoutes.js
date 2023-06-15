@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { justLogged } from "../middleware/justLogged.js";
-import { getEmptyCart, getCart, addProdToCart, deleteProdCart, vaciarCart } from "../controllers/cartController.js";
+import { getEmptyCart, getCart, addProdToCart, deleteProdCart, vaciarCart, sumarQuantity, restarQuantity, getSummary } from "../controllers/cartController.js";
 
 const cartRoutes = Router()
 
@@ -19,7 +19,12 @@ cartRoutes.delete('/eliminar/:pid', deleteProdCart)
 //Vaciar carrito
 cartRoutes.delete('/vaciarCarrito', vaciarCart)
 
+//Manejar cantidades
+cartRoutes.put('/sumar/:pid', sumarQuantity)
+cartRoutes.put('/restar/:pid', restarQuantity)
 
+//Resumen
+cartRoutes.get('/resumen/:cid',justLogged, getSummary)
 
 
 export default cartRoutes

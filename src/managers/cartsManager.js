@@ -95,6 +95,46 @@ class Carts{
         return {succes:'Productos eliminados'}
 
     }
+
+    async sumarCantidad(idCart, idProd){
+        const findCartId = await this.model.findById(idCart)
+        if(!findCartId){return {error:"No se encontro el carrito pedido"}}
+
+        const findProdId = await productDb.findById(idProd)
+        if(!findProdId){return {error:"el producto no existe"}}
+        // console.log(findProdId.stock)
+
+        const productos = findCartId.products
+
+        const prodFound = productos.find(el => el._id.toString() ===  idProd.toString())
+        if(prodFound.quantity >= findProdId.stock){
+            return {error:'No hay mas stock disponible para agregar'}
+        }
+        prodFound.quantity += 1 
+        // console.log(productos)
+
+        await this.model.findByIdAndUpdate(findCartId, {products:productos})
+
+        return {succes:'Cantidad actualizada'}
+
+    }
+    async restarCantidad (idCart, idProd){
+        const findCartId = await this.model.findById(idCart)
+        if(!findCartId){return {error:"No se encontro el carrito pedido"}}
+
+        const productos = findCartId.products
+
+        const prodFound = productos.find(el => el._id.toString() ===  idProd.toString())
+        if(prodFound.quantity <= 1){
+            return {error:'No es posible tener una cantidad menor a 1'}
+        }
+        prodFound.quantity -= 1 
+        //console.log(productos)
+
+        await this.model.findByIdAndUpdate(findCartId, {products:productos})
+
+        return {succes:'Cantidad actualizada'}
+    }
 }
 
 const cartsManager = new Carts(cartDb)

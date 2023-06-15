@@ -1,8 +1,6 @@
 const eliminarProdCarrito = e => {
     e.preventDefault()
 
-    console.log(e.target.dataset.eliminar)
-
     if(e.target.dataset.eliminar){
         let dataset = e.target.dataset.eliminar
         fetch(`/carts/eliminar/${dataset}`,{
@@ -35,3 +33,34 @@ const vaciar = e => {
 const vaciarCarrito = document.querySelector('.vaciar-carrito');
 vaciarCarrito.addEventListener('click', vaciar)
 
+
+const updateQuantity = e => {
+    e.preventDefault()
+
+    if(e.target.dataset.sumar){
+        let dataset = e.target.dataset.sumar
+        fetch(`/carts/sumar/${dataset}`,{
+            method: 'PUT',
+        }).then(result => {
+            if(result.status === 200){
+                window.location.reload()
+            }else if(result.status === 403){
+                window.location.reload()
+            }
+        })       
+    }
+
+    if(e.target.dataset.restar){
+        let dataset = e.target.dataset.restar
+        fetch(`/carts/restar/${dataset}`,{
+            method: 'PUT',
+        }).then(result => {
+            if(result.status === 200){
+                window.location.reload()
+            }else if(result.status === 403){
+                window.location.reload()
+            }
+        })       
+    }
+}
+listadoProdCart.addEventListener('click', updateQuantity)

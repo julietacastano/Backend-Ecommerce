@@ -30,28 +30,46 @@
     {{/if}}
     <h3 class="text-4xl text-center font-light my-5">{{nombrePagina}}</h3>
     <div class=" flex-column justify-between items-center flex-wrap m-10 space-y-4 p-8 pt-5 px-5 shadow-lg">
+    
     {{#if productos}}
     <div class="font-mono text-center text-sm font-medium">Orden: {{carrito._id}}</div>
     <div class="text-center text-sm font-medium">Total de productos: {{totalProds}}</div>
-        <div class="panel-carrito bg-white shadow rounded-lg gap-y-5 py-15">
+        <div class="panel-carrito bg-white shadow rounded-lg gap-y-5 py-5">
             <div class="divide-y divide-gray-200">
+            <div class="p-6 w-full flex flex-row items-center justify-between gap-4">
+                <p class="sm:w-2/5 md:w-3/8 block">Producto</p>
+                <p class="sm:w-1/5 md:w-2/8 block">Cantidad</p>
+                <p class="sm:w-1/5 md:w-1/8 block">Precio por unidad</p>
+                <p class="sm:w-1/5 md:w-1/8 block">Precio total</p>
+                <p class="sm:w-1/5 md:w-2/8 block">Eliminar</p>
+            </div>
             {{#each productos}}
-                <div class="p-6 w-full flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-8 md:space-y-0 gap-4">
-                        <a href="/products/{{this._id}}" class="sm:w-2/5 md:w-3/8 block text-2xl font-semibold text-indigo-800">{{this.titulo}}</a>
-                        <div class="text-sm font-medium sm:w-1/5 md:w-2/8 ">
-                        <p>Disponible: {{this.stock}}</p>
+                <div class="p-6 w-full flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-8 md:space-y-0 gap-2">
+                        <a href="/products/{{this._id}}" class="sm:w-2/5 lg:w-4/10 block text-2xl font-semibold text-indigo-800">{{this.titulo}}</a>
+                        <div class="sm:w-1/5 lg:w-2/10 flex flex-col">
+                            <div class="flex flex-row w-full"> 
+                                <button data-restar={{this._id}} class="px-3 py-1 border border-gray-300 rounded-md mr-1">-</button>
+                                <input type="text" name="quantity" value="{{this.quantity}}" class="quantityInput w-1/4 px-3 py-1 border border-gray-300 rounded-md">
+                                <button data-sumar={{this._id}} class="px-3 py-1 border border-gray-300 rounded-md ml-1" >+</button>
+                            </div>
+                            <p class="stock text-xs font-gray-200 mt-1"> Disponible: {{this.stock}}</p>
                         </div>
-                        <p class="text-sm font-medium sm:w-1/5 md:w-1/8 ">Precio: ${{this.precio}}</p>
-                        <a href="#" data-eliminar="{{this._id}}" class="sm:w-1/5 md:w-2/8 w-full px-2 py-2 md:py-1 text-xs leading-5 font-semibold rounded cursor-pointer bg-red-100 text-red-800 text-center">Eliminar</a>
+                        <p class="text-sm font-medium sm:w-1/5 lg:w-1/8">${{this.precio}}</p>
+                        <p class="text-sm font-medium sm:w-1/5 lg:w-1/8">${{this.precioAcc}}</p>
+                        <a href="#" data-eliminar="{{this._id}}" class="sm:w-1/5 lg:w-2/8 w-full px-2 py-2 md:py-1 text-xs leading-5 font-semibold rounded cursor-pointer bg-red-100 text-red-800 text-center">Eliminar</a>
                 </div>
             {{/each}}
             </div>
-            <div class="text-center text-sm font-medium py-5">Valor total de la compra: ${{valorTotal}}</div>
 
         </div>
-        <div class="m-2 mb-20 grid justify-items-stretch">
+        <div class="m-2 mb-10 grid justify-items-stretch">
             <a href="#" class="vaciar-carrito justify-self-end px-10 py-1 md:py-3 text-sm font-semibold rounded cursor-pointer bg-red-100 text-red-800 text-center">Vaciar Carrito</a>
         </div>
+        <div class="flex flex-col">
+            <p class="px-2 text-lg font-medium py-2">Total de la compra: ${{valorTotal}}</p>
+        <a href="/carts/resumen/{{carrito._id}}" class="vaciar-carrito w-full py-1 md:py-3 text-sm font-semibold rounded cursor-pointer bg-indigo-800 text-red-100 hover:bg-indigo-700 text-center">Comprar ahora</a>
+        </div>
+
     {{else}}
         <h3 class="text-xl text-center font-semibold">Todavía no agregaste nada al carrito</h3>
     {{/if}}
