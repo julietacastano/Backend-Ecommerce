@@ -7,6 +7,8 @@ const sessionSchema = new mongoose.Schema({
     password:{type: String, require:true},
     edad: {type:Number},
     rol:{type:String, lowercase:true,},
+    token: String,
+    expira: Date,
     carrito:{
         type: mongoose.Schema.ObjectId,
         ref:'cart'
@@ -14,9 +16,6 @@ const sessionSchema = new mongoose.Schema({
 })
 
 sessionSchema.pre('save', async function(next){
-    if(!this.isModified('password')){
-        return next()
-    }
     const hash = await bcrypt.hash(this.password, 10)
     this.password = hash
     next()

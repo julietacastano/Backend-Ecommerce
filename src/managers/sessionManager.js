@@ -1,3 +1,5 @@
+import { nanoid } from "nanoid";
+import bcrypt from "bcrypt"
 import { sessionDb } from "./mongoManager.js";
 
 class SessionManager {
@@ -24,18 +26,52 @@ class SessionManager {
         return {succes:`Felicitaciones ${newSession.name}, tu cuenta se ha creado correctamente`}
     }
 
-    //Cambiar password ------------------------------------------------------
-    async updatepass({email, password}){
+    //Generar token para cambiar password -----------------------------------------------
+    async getToken({email}){
         const usuario = await this.model.findOne({email})
-
         if(!usuario){return {error:"El email no corresponde con un usuario registrado"}}
 
-        usuario.password = password
+        const token = nanoid()
+        
+        usuario.token = token
+        usuario.expira = Date.now() + 3600000
 
         await usuario.save()
 
-        return {succes:`password actualizada con exito`}
+        return usuario
+
     }
+    async validateToken(token){
+        const usuario = await this.model.findOne({
+            token:token,
+            expira:{$gt:Date.now()}
+        })
+
+        if(!usuario){
+            return {error: 'El formulario expiro, por favor vuelve a intentar'}
+        }
+
+        return{succes: 'Token valido'}
+
+    }
+
+    //Cambiar password ------------------------------------------------------
+    async updatepass(password, token){
+        const usuario = await this.model.findOne({
+            token:token,
+            expira:{$gt:Date.now()}
+        })
+        if(!usuario){return {error: 'Error al reestablecer contraseña, por favor vuelve a intentar'}}
+
+        usuario.password = password
+        usuario.token = undefined
+        usuario.expira = undefined
+
+        await usuario.save()
+
+        return {succes:'Contraseña actualizada con exito'}
+    }
+
 }
 
 const sessManager = new SessionManager(sessionDb)

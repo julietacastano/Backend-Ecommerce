@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {authGithub, authGithubCallback, authUser } from "../middleware/passportConfig.js";
-import { registerForm, userRegister, loginForm, olvidePassForm, olvidePass, userLogout } from "../controllers/authController.js";
+import { registerForm, userRegister, loginForm, olvidePassForm, enviarToken, cambiarPass, guardarNuevaPass, userLogout } from "../controllers/authController.js";
 
 const authRoutes = Router()
 
@@ -18,7 +18,9 @@ authRoutes.get('/githubcallback', authGithubCallback , (req,res,next) =>{res.red
 
 //Cambiar contraseña 
 authRoutes.get('/olvidePass', olvidePassForm)
-authRoutes.post('/olvidePass', olvidePass)
+authRoutes.post('/olvidePass', enviarToken)
+authRoutes.get('/olvidePass/:token', cambiarPass)
+authRoutes.post('/olvidePass/:token', guardarNuevaPass)
 
 //Logout
 authRoutes.get('/logout', userLogout)

@@ -2,7 +2,6 @@ import passport from "passport";
 import jwt, { ExtractJwt } from "passport-jwt"
 import { Strategy as LocalStrategy } from "passport-local"
 import { Strategy as GithubStrategy } from "passport-github2";
-import bcrypt from "bcrypt"
 import { sessionDb } from "../managers/mongoManager.js";
 import cookieExtractor from "../helpers/cookieExtractor.js";
 
