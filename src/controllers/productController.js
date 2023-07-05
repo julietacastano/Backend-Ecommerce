@@ -30,6 +30,7 @@ const getProducts = async(req,res) => {
         nombrePagina:'Productos',
         products: products,
         usuario:req.user,
+        admin: req.user?.rol === 'admin' ? true : false,
         carrito,
         err,
         msg,
@@ -67,7 +68,9 @@ const getProdById = async (req,res)=>{
         nombrePagina:'Producto seleccionado',
         producto:product,
         usuario:req.user,
+        admin: req.user?.rol === 'admin' ? true : false,
         carrito,
+        stock: product.stock > 0 ? true : false ,
         err,
         msg
     })

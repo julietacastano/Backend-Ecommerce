@@ -1,7 +1,7 @@
 import cartsManager from "../managers/cartsManager.js";
 import { sessionDb, productDb } from "../managers/mongoManager.js";
 
-//Mostrar carrito vacio---------------------------------------------------
+//Mostrar carrito vacio-----------------------------------------------------------------------------------
 const getEmptyCart = async(req,res)=>{
     if(!req.user.carrito){
         const newCart = await cartsManager.createCart()
@@ -14,11 +14,12 @@ const getEmptyCart = async(req,res)=>{
 
     res.render('cart',{
         nombrePagina:'Carrito',
-        usuario:req.user
+        usuario:req.user,
+        admin: req.user?.rol === 'admin' ? true : false,
     })
 }
 
-//Muestra carrito ------------------------------------------------------------------------
+//Muestra carrito ---------------------------------------------------------------------------------------
 const getCart = async (req,res)=>{
     if(!req.user.carrito){
         const newCart = await cartsManager.createCart()
@@ -27,7 +28,8 @@ const getCart = async (req,res)=>{
         
         return res.render('cart',{
             nombrePagina:'Carrito',
-            usuario:req.user
+            usuario:req.user,
+            admin: req.user?.rol === 'admin' ? true : false,
         })
     }
 
@@ -43,11 +45,16 @@ const getCart = async (req,res)=>{
         let prodEncontrado = await productDb.findById(id).lean()
         let precioAcc = (prodEncontrado.precio * quan)
 
-        let prod = {...prodEncontrado, quantity:quan, precioAcc:precioAcc}
-        // console.log(prod)
+        if(quan <= prodEncontrado.stock){
+            let prod = {...prodEncontrado, quantity:quan, precioAcc:precioAcc}
+            // console.log(prod)
+    
+            prodsCarrito.push(prod)
+            valorTotal += (prodEncontrado.precio * quan)
+        }else{
+            await cartsManager.deleteProduct(cart, id)
+        }
 
-        prodsCarrito.push(prod)
-        valorTotal += (prodEncontrado.precio * quan)
     }
 
     // let precioAcc = prodsCarrito.precio * prodsCarrito.quantity
@@ -57,6 +64,7 @@ const getCart = async (req,res)=>{
     res.render('cart',{
         nombrePagina:'Carrito',
         usuario:req.user,
+        admin: req.user?.rol === 'admin' ? true : false,
         carrito: cart,
         productos:prodsCarrito,
         totalProds:prodsCarrito.length,
@@ -66,7 +74,7 @@ const getCart = async (req,res)=>{
     })
 }
 
-//Agrega productos al carrito -------------------------------------------------
+//Agrega productos al carrito ----------------------------------------------------------------------------
 const addProdToCart = async (req,res)=>{
     if(!req.user.carrito){
         //Crear el carrito
@@ -129,7 +137,7 @@ const deleteProdCart = async(req, res) => {
     res.status(200).send(`${prodDeleteCart.succes}`)
 }
 
-//Vaciar Carrito --------------------------------------------------------------
+//Vaciar Carrito ----------------------------------------------------------------------------------------
 const vaciarCart = async(req,res) => {
     const carritoUsuario = req.user.carrito
     if(!carritoUsuario){
@@ -184,10 +192,47 @@ const restarQuantity = async (req,res) => {
     res.status(200).send(`${carritoActualizado.succes}`)
 }
 
-//Resumen
-const getSummary = (req,res) => {
+//Resumen -----------------------------------------------------------------------------------------------
+const getSummary = async (req,res) => {
+
+    const cart = await cartsManager.getCarts(req.params.cid) 
+    // console.log(cart)
+    const prodsCarrito = []
+    let valorTotal = 0
+    const productos = cart.products
+
+    for(let i=0; i<productos?.length; i++){
+        let id = productos[i]._id
+        let quan = productos[i].quantity
+        let prodEncontrado = await productDb.findById(id).lean()
+        let precioAcc = (prodEncontrado.precio * quan)
+
+        
+        if(quan <= prodEncontrado.stock){
+            let prod = {...prodEncontrado, quantity:quan, precioAcc:precioAcc}
+    
+            prodsCarrito.push(prod)
+            valorTotal += (prodEncontrado.precio * quan)
+        }else{
+            await cartsManager.deleteProduct(cart, id)
+
+        }
+
+    }
+
+    const msg = req.flash('message')
+    const err = req.flash('error')
     res.render('resumen',{
         nombrePagina:'Resumen de compra',
+        usuario:req.user,
+        name:req.user.name,
+        email:req.user.email,
+        carrito: cart,
+        productos:prodsCarrito,
+        totalProds:prodsCarrito.length,
+        valorTotal,
+        err,
+        msg
     })
 }
 

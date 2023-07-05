@@ -10,7 +10,8 @@ const eliminar = e => {
                 window.location.replace('/admin')
             }
         })       
-    }
+    }else if(e.target.tagName === 'A'){
+        window.location.href = e.target.href}
 }
 
 const listadoProd = document.querySelector('.panel-admin');

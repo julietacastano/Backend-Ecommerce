@@ -12,6 +12,10 @@ const sessionSchema = new mongoose.Schema({
     carrito:{
         type: mongoose.Schema.ObjectId,
         ref:'cart'
+    },
+    ordenes:{
+        type: mongoose.Schema.ObjectId,
+        ref:'orders'
     }
 })
 

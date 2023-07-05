@@ -8,6 +8,7 @@ import cartRoutes from "./routes/cartRoutes.js";
 import productsRoutes from "./routes/productsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import checkoutRoutes from "./routes/checkoutRoutes.js";
 import { passportInitialize, sessionInitialize } from "./middleware/passportConfig.js";
 
 dotenv.config()
@@ -34,10 +35,11 @@ app.use(session({
 app.use(passportInitialize, sessionInitialize) 
 app.use(flash());
 
-app.use('/products', productsRoutes)
-app.use('/carts', cartRoutes)
 app.use('/auth', authRoutes)
 app.use('/admin', adminRoutes)
+app.use('/products', productsRoutes)
+app.use('/carts', cartRoutes)
+app.use('/checkout', checkoutRoutes)
 
 const port = 8080
 app.listen(port, ()=>{console.log(`conectado a puerto ${port}`)})

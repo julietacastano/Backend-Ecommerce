@@ -1,5 +1,7 @@
 import { check, validationResult } from "express-validator"
+import multer from "multer"
 import prodManager from "../managers/productManager.js"
+import uploadImg from "../middleware/uploadImg.js"
 
 //Panel de administrador------------------------------------------------------------
 const penelAdmin = async (req, res, next) =>{
@@ -59,7 +61,13 @@ const publicarProducto = async(req,res)=>{
         })  
     }
 
-    const agregarProd = await prodManager.addProduct(req.body)
+    const newProd = req.body
+    if(req.file){
+        newProd.img = req.file.filename
+    }
+
+    const agregarProd = await prodManager.addProduct(newProd)
+    
 
     if(agregarProd.error){
         const completado = req.body
@@ -72,6 +80,42 @@ const publicarProducto = async(req,res)=>{
 
     req.flash('message', `${agregarProd.succes}`)
     res.redirect('/admin')
+}
+//Upload Img -----------------------------------------------------------------------------------
+const subirImagen = (req,res, next) => {
+
+    uploadImg(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            // Multer error
+            if(err.code === 'LIMIT_FILE_SIZE'){
+                const completado = req.body
+                return res.render('crear', {
+                    nombrePagina:'Registro',
+                    errores:[{msg:'El archivo es muy grande: máximo 100KB'}],
+                    completado
+                })  
+
+            } else {
+                const completado = req.body
+                return res.render('crear', {
+                    nombrePagina:'Registro',
+                    errores:[{msg:`${err.message}`}],
+                    completado
+                })  
+
+            }
+        } else if (err) {
+            // unknown error 
+            const completado = req.body
+            return res.render('crear', {
+                nombrePagina:'Registro',
+                errores:[{msg:`${err.message}`}],
+                completado
+            })         
+        }
+        // Everything went fine.
+        next()
+    })
 }
 
 //Editar producto  ----------------------------------------------------------------
@@ -101,6 +145,7 @@ const editarProducto = async (req,res) => {
     let resultadoErrores = validationResult(req)
     
     const id = req.params.pid
+
     const producto = await prodManager.getProductById(id)
 
     if(!resultadoErrores.isEmpty()){
@@ -111,7 +156,12 @@ const editarProducto = async (req,res) => {
         })
     }
 
-    const prodEditado = await prodManager.updatePrduct(id, req.body)
+    const datosProd = req.body
+    if(req.file){
+        datosProd.img = req.file.filename
+    }
+
+    const prodEditado = await prodManager.updatePrduct(id, datosProd)
 
     if(prodEditado.error){
         req.flash('error', `${prodEditado.error}`)
@@ -142,6 +192,7 @@ export {
     penelAdmin,
     crearProducto,
     publicarProducto,
+    subirImagen,
     editarProductoForm,
     editarProducto,
     eliminarProducto

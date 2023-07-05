@@ -57,7 +57,7 @@ class ProductManager{
     }
 
     //Agregar producto ----------------------------------------------------------------
-    async addProduct({titulo, descripcion, precio, codigo, stock, categoria}){
+    async addProduct({titulo, descripcion, precio, codigo, stock, categoria, img}){
         const findCode = await this.model.findOne({codigo})
 
         if(findCode){
@@ -70,7 +70,8 @@ class ProductManager{
             precio: precio,
             codigo: codigo,
             stock: stock,
-            categoria: categoria
+            categoria: categoria,
+            img:img
         })
         
         return {succes:'El producto fue agregado correctamente'}

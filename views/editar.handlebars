@@ -19,7 +19,7 @@
     <h3 class="text-2xl text-center my-5">{{nombrePagina}}</h3>
         {{#each producto}}   
             <div class="bg-white shadow py-5 px-4 rounded mx-auto max-w-4xl my-10">
-                <form method="POST" action="/admin/editar/{{_id}}" class="space-y-8">
+                <form method="POST" action="/admin/editar/{{_id}}" enctype="multipart/form-data" class="space-y-8">
                     <div>
                         <label for="titulo" class="block text-sm text-gray-600 mb-1 uppercase font-semibold">Titulo</label>
                         <input type="text" id="titulo" name="titulo" placeholder="Titulo del libro" class="w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400" value="{{this.titulo}}">
@@ -49,6 +49,10 @@
                             <option value="Romance">Romance</option>
                             <option value="Thriller">Thriller</option>
                         </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1 uppercase font-semibold">Imagen</label>
+                        <input type="file" name="imagen">
                     </div>
                     <input type="submit" value="Publicar" class="w-full bg-indigo-800 text-red-100 hover:bg-indigo-700 text-white rounded-md py-2 px-5 cursor-pointer">
                 {{/each}}

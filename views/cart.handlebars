@@ -2,7 +2,9 @@
     <div class="mx-auto flex justify-between items-center flex-wrap h-20">
         <a href="/products"><img src="/static/logo/logo2.png" alt="Logo del comercio"  class="h-20"></a>
         <nav class="">
+            {{#if admin}}
             <a class= "py-3 px-3 text-red-100" href="/admin">Administrador</a>
+            {{/if}}
             <a class= "py-3 px-3 text-red-100" href="/products">Inicio</a>
             {{#if usuario}}
             <a href="/auth/logout" class= "py-3 pl-3 pr-10 text-red-100">Cerrar sesion</a>
@@ -32,7 +34,6 @@
     <div class=" flex-column justify-between items-center flex-wrap m-10 space-y-4 p-8 pt-5 px-5 shadow-lg">
     
     {{#if productos}}
-    <div class="font-mono text-center text-sm font-medium">Orden: {{carrito._id}}</div>
     <div class="text-center text-sm font-medium">Total de productos: {{totalProds}}</div>
         <div class="panel-carrito bg-white shadow rounded-lg gap-y-5 py-5">
             <div class="divide-y divide-gray-200">
@@ -67,7 +68,7 @@
         </div>
         <div class="flex flex-col">
             <p class="px-2 text-lg font-medium py-2">Total de la compra: ${{valorTotal}}</p>
-        <a href="/carts/resumen/{{carrito._id}}" class="vaciar-carrito w-full py-1 md:py-3 text-sm font-semibold rounded cursor-pointer bg-indigo-800 text-red-100 hover:bg-indigo-700 text-center">Comprar ahora</a>
+            <a href="/carts/resumen/{{carrito._id}}" class="vaciar-carrito w-full py-1 md:py-3 text-sm font-semibold rounded cursor-pointer bg-indigo-800 text-red-100 hover:bg-indigo-700 text-center">Comprar ahora</a>
         </div>
 
     {{else}}

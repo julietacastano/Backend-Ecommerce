@@ -15,13 +15,13 @@ cartRoutes.get('/:cid', justLogged, getCart)
 cartRoutes.post('/agregarProd/:pid', justLogged, addProdToCart)
 
 //Eliminar producto del carrito
-cartRoutes.delete('/eliminar/:pid', deleteProdCart)
+cartRoutes.delete('/eliminar/:pid', justLogged, deleteProdCart)
 //Vaciar carrito
-cartRoutes.delete('/vaciarCarrito', vaciarCart)
+cartRoutes.delete('/vaciarCarrito', justLogged, vaciarCart)
 
 //Manejar cantidades
-cartRoutes.put('/sumar/:pid', sumarQuantity)
-cartRoutes.put('/restar/:pid', restarQuantity)
+cartRoutes.put('/sumar/:pid', justLogged, sumarQuantity)
+cartRoutes.put('/restar/:pid', justLogged, restarQuantity)
 
 //Resumen
 cartRoutes.get('/resumen/:cid',justLogged, getSummary)
