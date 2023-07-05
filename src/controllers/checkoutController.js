@@ -1,6 +1,7 @@
 import cartsManager from "../managers/cartsManager.js"
 import { productDb, sessionDb } from "../managers/mongoManager.js"
 import orderManager from "../managers/orderManager.js"
+import { confirmarCompra } from "../helpers/email.js"
 
 
 const checkoutSummary = async (req,res) => {
@@ -56,11 +57,20 @@ const checkout = async (req,res) => {
         await productDb.findByIdAndUpdate(id, {stock:newStock})
     }
 
+    //Vacio el carrito utilizado
     const vaciarCarrito = await cartsManager.vaciarCarrito(cart)
     if(vaciarCarrito.error){
         req.flash('error', `${vaciarCarrito.error}`)
         return res.redirect('/products')
     }
+
+    //Se envia el mail de confirmacion
+    const urlCheckout = `${req.headers.host}/checkout${newOrder._id}`
+    confirmarCompra({
+        email,
+        name,
+        urlCheckout
+    })
 
     return res.redirect(`/checkout/${newOrder._id}`)
 

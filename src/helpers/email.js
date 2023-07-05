@@ -25,4 +25,35 @@ const reestablecerPassMail = async (datos) => {
     })
 }
 
-export {reestablecerPassMail}
+const confirmarCompra = async (datos) => {
+    const transporter = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+        }
+    });
+
+    await transporter.sendMail({
+        from:'BookStore.com',
+        to:datos.email,
+        subject:'Gracias por comprar en Book Store',
+        html:`<h1 style="text-align:center; font-family: Arial, Helvetica;">Confirmación de compra</h1>
+            <p style="font-family: Arial, Helvetica;">Hola ${datos.nombre}, gracias por tu compra! Tu orden de compra ha sido confirmada. Para ver su detalle podes hacer click en el siguiente enlace</p>
+            <a>${datos.urlCheckout}</a>
+
+            <p style="font-family: Arial, Helvetica;">Si no funciona, por favor copia el siguiente link en el navegador:</p>
+            <a>${datos.urlCheckout}</a>
+            
+            <p style="font-family: Arial, Helvetica;">Saludos,</p>
+            <p style="font-family: Arial, Helvetica;">Book Store.</p>
+
+        `
+    })
+}
+
+export {
+    reestablecerPassMail,
+    confirmarCompra
+}
