@@ -15,7 +15,7 @@ const registerForm =  (req,res)=>{
 }
 const userRegister = async (req,res)=>{
     await check('name').notEmpty().withMessage('El nombre no puede estar vacio').run(req)
-    await check('email').notEmpty().withMessage('El email no puede estar vacio').run(req)
+    await check('email').isEmail().withMessage('Eso no parece un email').run(req)
     await check('password').isLength({min:4}).withMessage('La contraseña es muy corta').run(req)
     
     let resultadoErrores = validationResult(req)
