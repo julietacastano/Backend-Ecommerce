@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash"
 import dotenv from "dotenv"
+import createError from "http-errors"
 import cartRoutes from "./routes/cartRoutes.js";
 import productsRoutes from "./routes/productsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -33,6 +34,7 @@ app.use(session({
 }))
 
 app.use(passportInitialize, sessionInitialize) 
+
 app.use(flash());
 
 app.use('/auth', authRoutes)
@@ -40,6 +42,17 @@ app.use('/admin', adminRoutes)
 app.use('/products', productsRoutes)
 app.use('/carts', cartRoutes)
 app.use('/checkout', checkoutRoutes)
+
+app.use((req,res,next) => {
+    next(createError(404, 'No encontrado'))
+})
+app.use((error,req,res,next) => {
+    const status = error.status || 500
+
+    res.render('404', {
+        nombrePagina: `${status} - ${error.message}` 
+    })
+})
 
 const port = 8080
 app.listen(port, ()=>{console.log(`conectado a puerto ${port}`)})

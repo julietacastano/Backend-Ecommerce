@@ -51,6 +51,28 @@ const buscador = async (req,res) =>{
     })  
 }
 
+//Filtro ---------------------------------------------------------------------------------
+const filtro = async (req,res,) => {
+    const productos = await prodManager.filtroCat(req.params.cat)
+
+    if(productos.error){
+        req.flash('error', `${productos.error}`)
+        res.status(404).send('Error')
+    }
+    
+    res.status(200).send(`${productos.succes}`)   
+}
+//Get categorias
+const getCat = async (req,res) => {
+    const products = await prodManager.filtroCat(req.params.cat)
+
+    res.render('categoria', {
+        nombrePagina:`Productos ${req.params.cat}`,
+        products: products,
+        usuario:req.user,
+    })  
+}
+
 //Mostrar productos por ID--------------------------------------------------------
 const getProdById = async (req,res)=>{
     const product = await prodManager.getProductById(req.params.pid)
@@ -80,5 +102,7 @@ const getProdById = async (req,res)=>{
 export {
     getProducts,
     buscador,
+    filtro,
+    getCat,
     getProdById
 }

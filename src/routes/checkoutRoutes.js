@@ -4,7 +4,7 @@ import { checkoutSummary, checkout } from "../controllers/checkoutController.js"
 
 const checkoutRoutes = Router()
 
-checkoutRoutes.get('/:oid', checkoutSummary)
+checkoutRoutes.get('/:oid', justLogged, checkoutSummary)
 checkoutRoutes.post('/:cid', justLogged, checkout)
 
 export default checkoutRoutes

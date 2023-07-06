@@ -1,6 +1,5 @@
 import { check, validationResult } from "express-validator";
 import sessManager from "../managers/sessionManager.js";
-import jwtGenerator from "../helpers/token.js";
 import { reestablecerPassMail } from "../helpers/email.js";
 
 //Register ---------------------------------------
@@ -34,16 +33,8 @@ const userRegister = async (req,res)=>{
         return res.redirect('/auth/register')
     }
 
-    if(addSec.succes){
-        const token = jwtGenerator({id:req.body._id , name: req.body.name})
-        res.cookie('tokenJWT', token, {
-                httpOnly: true,
-                maxAge: 60*60*1000,
-            })
-
-        req.flash('message', `${addSec.succes}`)
-        return res.redirect('/auth/login')
-    }
+    req.flash('message', `${addSec.succes}`)
+    return res.redirect('/auth/login')
 }
 
 //Login ----------------------------------------

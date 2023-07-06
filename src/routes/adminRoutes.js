@@ -16,6 +16,6 @@ adminRoutes.get('/editar/:pid', justAdmin, editarProductoForm)
 adminRoutes.post('/editar/:pid', justAdmin, subirImagen, editarProducto)
 
 //Elimiar un producto
-adminRoutes.delete('/eliminar/:pid', eliminarProducto) 
+adminRoutes.delete('/eliminar/:pid', justAdmin, eliminarProducto) 
 
 export default adminRoutes

@@ -22,10 +22,6 @@ class ProductManager{
 
     //Buscador ------------------------------------------------------------
     async buscador(search){
-        // const products = await this.model.find({
-        //     $text:{$search:`${search}`}
-        // })
-
         const products = await this.model.aggregate(
             [
                 {
@@ -42,11 +38,18 @@ class ProductManager{
             ]
         )
 
-        // console.log(products)
+        if(!products){return {error:'No se encontraron los productos'}}
 
         return products
-    
     }
+
+    //Filtro ---------------------------------------------------------------------------
+    async filtroCat(categoria) {
+        const productos = await this.model.find({categoria: categoria}).lean()
+        if(!productos){return {error:'No se encontraron las categorias'}}
+
+        return productos
+    } 
 
     //Producto por ID -------------------------------------------------
     async getProductById(prodId){

@@ -1,5 +1,4 @@
 import { nanoid } from "nanoid";
-import bcrypt from "bcrypt"
 import { sessionDb } from "./mongoManager.js";
 
 class SessionManager {
